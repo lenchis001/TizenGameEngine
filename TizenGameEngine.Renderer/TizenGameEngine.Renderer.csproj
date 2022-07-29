@@ -1,7 +1,7 @@
-﻿<Project Sdk="Tizen.NET.Sdk/1.0.9">
+<Project Sdk="Tizen.NET.Sdk/1.0.9">
 
   <PropertyGroup>
-    <OutputType>Exe</OutputType>
+    <OutputType>Library</OutputType>
     <TargetFramework>tizen50</TargetFramework>
   </PropertyGroup>
 
@@ -15,11 +15,6 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Folder Include="lib\" />
-    <Folder Include="res\" />
-  </ItemGroup>
-
-  <ItemGroup>
   <PackageReference Include="OpenTK.Tizen" Version="3.0.2" />
     <PackageReference Include="Tizen.NET" Version="6.0.0.14995">
       <ExcludeAssets>Runtime</ExcludeAssets>
@@ -27,8 +22,12 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\TizenGameEngine.Renderer\TizenGameEngine.Renderer.csproj" />
-    <ProjectReference Include="..\TizenGameEngine.Logger\TizenGameEngine.Logger.csproj" />
+    <None Remove="Objects\" />
+    <None Remove="Common\" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Objects\" />
+    <Folder Include="Common\" />
   </ItemGroup>
 </Project>
 

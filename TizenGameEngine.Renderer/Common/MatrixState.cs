@@ -17,7 +17,7 @@
 using System;
 using OpenTK;
 
-namespace CubeTexture
+namespace TizenGameEngine.Renderer.Common
 {
     public static class MatrixState
     {

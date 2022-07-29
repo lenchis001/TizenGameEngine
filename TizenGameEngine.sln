@@ -5,6 +5,10 @@ VisualStudioVersion = 15.0.27428.1
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TizenGameEngine", "TizenGameEngine\TizenGameEngine.csproj", "{1A3E13E8-5DA0-4959-B2C5-2B84C6D3E3F2}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TizenGameEngine.Renderer", "TizenGameEngine.Renderer\TizenGameEngine.Renderer.csproj", "{B59DA66C-9D7D-49E8-9F67-AC016B2D38D5}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TizenGameEngine.Logger", "TizenGameEngine.Logger\TizenGameEngine.Logger.csproj", "{177E62E1-E232-49E9-970E-FDD2AEE6BCCA}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -15,6 +19,14 @@ Global
 		{1A3E13E8-5DA0-4959-B2C5-2B84C6D3E3F2}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{1A3E13E8-5DA0-4959-B2C5-2B84C6D3E3F2}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{1A3E13E8-5DA0-4959-B2C5-2B84C6D3E3F2}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B59DA66C-9D7D-49E8-9F67-AC016B2D38D5}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B59DA66C-9D7D-49E8-9F67-AC016B2D38D5}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B59DA66C-9D7D-49E8-9F67-AC016B2D38D5}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B59DA66C-9D7D-49E8-9F67-AC016B2D38D5}.Release|Any CPU.Build.0 = Release|Any CPU
+		{177E62E1-E232-49E9-970E-FDD2AEE6BCCA}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{177E62E1-E232-49E9-970E-FDD2AEE6BCCA}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{177E62E1-E232-49E9-970E-FDD2AEE6BCCA}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{177E62E1-E232-49E9-970E-FDD2AEE6BCCA}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

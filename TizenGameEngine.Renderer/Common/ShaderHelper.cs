@@ -16,7 +16,7 @@
  */
 using OpenTK.Graphics.ES20;
 
-namespace CubeTexture
+namespace TizenGameEngine.Renderer.Common
 {
     public static class ShaderHelper
     {

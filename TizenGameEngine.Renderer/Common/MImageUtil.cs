@@ -15,7 +15,7 @@
  *
  */
 using System.IO;
-namespace CubeTexture
+namespace TizenGameEngine.Renderer.Common
 {
     public static class MImageUtil
     {
