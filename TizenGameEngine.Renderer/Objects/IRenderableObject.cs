@@ -10,11 +10,11 @@ namespace TizenGameEngine.Renderer.Objects
 
         void Draw();
 
-        void Move();
+        void Move(float x, float y, float z);
 
-        void Scale();
+        void Scale(float x, float y, float z);
 
-        void Rotate(ref float anglex, ref float angley, int flag);
+        void Rotate(float x, float y, float z);
     }
 }
 

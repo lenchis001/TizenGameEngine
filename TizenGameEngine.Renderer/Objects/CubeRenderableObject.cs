@@ -20,6 +20,8 @@ namespace TizenGameEngine.Renderer.Objects
         // Attribute locations
         ushort[] _indices;
 
+        private Vector3 _position, _rotation, _scale;
+
         // MVP matrix
         Matrix4 _perspective;
         Matrix4 _mvpMatrix;
@@ -131,37 +133,44 @@ namespace TizenGameEngine.Renderer.Objects
             GL.DisableVertexAttribArray(_textureHandle);
         }
 
-        public void Move()
+        public void Move(float x, float y, float z)
         {
-            throw new NotImplementedException();
+            _position.X = x;
+            _position.Y = y;
+            _position.Z = z;
+
+            _recalculateMatrix();
         }
 
-        public void Rotate(ref float anglex, ref float angley, int flag)
+        public void Rotate(float x, float y, float z)
         {
-            if (anglex >= 360.0f)
-            {
-                anglex -= 360.0f;
-            }
+            _rotation.X = x;
+            _rotation.Y = y;
+            _rotation.Z = z;
 
+            _recalculateMatrix();
+        }
+
+        public void Scale(float x, float y, float z)
+        {
+            _scale.X = x;
+            _scale.Y = y;
+            _scale.Z = z;
+
+            _recalculateMatrix();
+        }
+
+        private void _recalculateMatrix()
+        {
             MatrixState.EsMatrixLoadIdentity(ref _modelview);
 
-            MatrixState.EsTranslate(ref _modelview, 0.0f, 0.0f, -3.0f);
+            MatrixState.EsTranslate(ref _modelview, _position.X, _position.Y, _position.Z);
 
-            MatrixState.EsRotate(ref _modelview, anglex, 0.0f, 1.0f, 0.0f);
-
-            if (angley >= 360.0f)
-            {
-                angley -= 360.0f;
-            }
-
-            MatrixState.EsRotate(ref _modelview, angley, 1.0f, 0.0f, 0.0f);
+            MatrixState.EsRotate(ref _modelview, _rotation.X, 0.0f, 1.0f, 0.0f);
+            MatrixState.EsRotate(ref _modelview, _rotation.Y, 1.0f, 0.0f, 0.0f);
+            MatrixState.EsRotate(ref _modelview, _rotation.Z, 0.0f, 0.0f, 1.0f);
 
             _mvpMatrix = Matrix4.Mult(_modelview, _perspective);
-        }
-
-        public void Scale()
-        {
-            throw new NotImplementedException();
         }
     }
 }

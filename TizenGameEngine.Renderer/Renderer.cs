@@ -19,7 +19,7 @@ namespace TizenGameEngine.Renderer
         private Matrix4 _perspective;
 
         // Rotation angle
-        private float angleX = 45.0f, angleY = 0f;
+        private float angleX = 45.0f;
 
         public Renderer(DirectoryInfo directoryInfo, int width, int height)
         {
@@ -29,7 +29,6 @@ namespace TizenGameEngine.Renderer
 
             _width = width;
             _height = height;
-
 
             float ratio = (float)_width / _height;
             MatrixState.EsMatrixLoadIdentity(ref _perspective);
@@ -41,17 +40,31 @@ namespace TizenGameEngine.Renderer
             GL.ClearColor(Color4.Gray);
             GL.Enable(EnableCap.DepthTest);
 
+
+            MatrixState.EsRotate(ref _perspective, 20f, 1, 0, 0);
+
             var cube = new CubeRenderableObject(_directoryInfo, ref _perspective);
             cube.Load();
+            cube.Move(-1, 2, -3);
             _renderableObjects.Add(cube);
+
+            var cube2 = new CubeRenderableObject(_directoryInfo, ref _perspective);
+            cube2.Load();
+            cube2.Move(1, 2, -3);
+            _renderableObjects.Add(cube2);
         }
 
         public void Draw()
         {
+            angleX += 1;
+            if (angleX >= 360.0f)
+            {
+                angleX -= 360.0f;
+            }
+
             foreach (var renderableObject in _renderableObjects)
             {
-                angleX += 1;
-                renderableObject.Rotate(ref angleX, ref angleY, 1);
+                renderableObject.Rotate(angleX, 0, 0);
                 renderableObject.Draw();
             }
         }
