@@ -4,8 +4,9 @@ using OpenTK;
 using OpenTK.Graphics.ES20;
 using Tizen.Applications;
 using TizenGameEngine.Renderer.Common;
+using TizenGameEngine.Renderer.Models;
 
-namespace TizenGameEngine.Renderer.Objects
+namespace TizenGameEngine.Renderer.RenderableObjects
 {
     public class CubeRenderableObject: IRenderableObject
     {
@@ -23,13 +24,13 @@ namespace TizenGameEngine.Renderer.Objects
         private Vector3 _position, _rotation, _scale;
 
         // MVP matrix
-        Matrix4 _perspective;
+        readonly ReferenceContainer<Matrix4> _perspective;
         Matrix4 _mvpMatrix;
         Matrix4 _modelview;
 
-        DirectoryInfo _directoryInfo;
+        readonly DirectoryInfo _directoryInfo;
 
-        public CubeRenderableObject(DirectoryInfo directoryInfo, ref Matrix4 perspective)
+        public CubeRenderableObject(DirectoryInfo directoryInfo, ReferenceContainer<Matrix4> perspective)
         {
             _directoryInfo = directoryInfo;
             _perspective = perspective;
@@ -170,7 +171,7 @@ namespace TizenGameEngine.Renderer.Objects
             MatrixState.EsRotate(ref _modelview, _rotation.Y, 1.0f, 0.0f, 0.0f);
             MatrixState.EsRotate(ref _modelview, _rotation.Z, 0.0f, 0.0f, 1.0f);
 
-            _mvpMatrix = Matrix4.Mult(_modelview, _perspective);
+            _mvpMatrix = Matrix4.Mult(_modelview, _perspective.Value);
         }
     }
 }

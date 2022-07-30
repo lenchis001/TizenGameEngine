@@ -24,10 +24,14 @@
   <ItemGroup>
     <None Remove="Objects\" />
     <None Remove="Common\" />
+    <None Remove="Models\" />
+    <None Remove="Cameras\" />
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="Objects\" />
+    <Folder Include="RenderableObjects\" />
     <Folder Include="Common\" />
+    <Folder Include="Models\" />
+    <Folder Include="Cameras\" />
   </ItemGroup>
 </Project>
 

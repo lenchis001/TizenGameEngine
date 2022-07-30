@@ -23,57 +23,40 @@ using TizenGameEngine.Renderer;
 
 namespace CubeTexture
 {
-    class CubeByMultProgramView : TizenGameApplication
+    class TizenGameEngineApplication : TizenGameApplication
     {
         private Renderer _renderer;
-
-        public void OnKeyEvent(object sender, KeyboardKeyEventArgs e)
-        {
-        }
 
         protected override void OnCreate()
         {
             base.OnCreate();
 
-            _renderer = new Renderer(DirectoryInfo, Window.Width, Window.Height);
-
-            Window.RenderFrame += OnRenderFrame;
-            Window.KeyDown += OnKeyEvent;
+            _renderer = new Renderer(DirectoryInfo, Window);
+            _renderer.UseCamera();
+            _renderer.SubscribeToEvents();
 
             GL.Viewport(0, 0, Window.Width, Window.Height);
 
             _renderer.Load();
         }
 
-
-        void Draw()
-        {
-            GL.Clear(ClearBufferMask.ColorBufferBit | ClearBufferMask.DepthBufferBit);
-
-            _renderer.Draw();
-
-            Window.SwapBuffers();
-        }
-
         protected override void OnResume()
         {
             Window.MakeCurrent();
             GL.Viewport(0, 0, Window.Width, Window.Height);
-
-            Draw();
         }
 
-        protected void OnRenderFrame(object oe, FrameEventArgs e)
+        protected override void OnTerminate()
         {
-            Draw();
+            base.OnTerminate();
+
+            _renderer.UnsubscribeFromEvents();
         }
 
-        static async Task Main(string[] args)
+        static void Main(string[] args)
         {
-            var app = new CubeByMultProgramView() { GLMajor = 2, GLMinor = 0 };
+            var app = new TizenGameEngineApplication() { GLMajor = 2, GLMinor = 0 };
             app.Run(args);
-
-            await Task.Delay(4000);
         }
     }
 

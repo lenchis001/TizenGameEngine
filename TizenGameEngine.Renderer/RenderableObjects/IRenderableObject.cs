@@ -1,8 +1,4 @@
-﻿using System;
-using OpenTK;
-using TizenGameEngine.Renderer.Common;
-
-namespace TizenGameEngine.Renderer.Objects
+﻿namespace TizenGameEngine.Renderer.RenderableObjects
 {
     public interface IRenderableObject
     {
