@@ -5,13 +5,17 @@ using OpenTK.Graphics.ES20;
 using Tizen.Applications;
 using TizenGameEngine.Renderer.Common;
 using TizenGameEngine.Renderer.Models;
+using TizenGameEngine.Renderer.Services;
 
 namespace TizenGameEngine.Renderer.RenderableObjects
 {
     public class CubeRenderableObject: IRenderableObject
     {
+        readonly DirectoryInfo _directoryInfo;
+        readonly ReferenceContainer<Matrix4> _perspective;
+
         // Handle to a program object
-        int _programObject;
+        int _shaderProgram;
         // Attribute locations
         int _positionLoc, _uniformLoc;
         // Uniform locations
@@ -24,41 +28,22 @@ namespace TizenGameEngine.Renderer.RenderableObjects
         private Vector3 _position, _rotation, _scale;
 
         // MVP matrix
-        readonly ReferenceContainer<Matrix4> _perspective;
         Matrix4 _mvpMatrix;
         Matrix4 _modelview;
+        private bool disposedValue;
 
-        readonly DirectoryInfo _directoryInfo;
-
-        public CubeRenderableObject(DirectoryInfo directoryInfo, ReferenceContainer<Matrix4> perspective)
+        public CubeRenderableObject(
+            DirectoryInfo directoryInfo,
+            ReferenceContainer<Matrix4> perspective,
+            int shaderProgram)
         {
             _directoryInfo = directoryInfo;
             _perspective = perspective;
+            _shaderProgram = shaderProgram;
         }
 
         public void Load()
         {
-            string vShaderStr = "uniform mat4 u_mvpMatrix;              \n" +
-                          "attribute vec2 aTexture;                      \n" +
-                          "attribute vec4 a_position;                  \n" +
-                          "varying vec2 vtexture;\n" +
-                          "void main()                                 \n" +
-                          "{                                           \n" +
-                          "   vtexture = aTexture;  \n" +
-                          "   gl_Position = u_mvpMatrix * a_position;  \n" +
-                          "}                                           \n";
-            string fShaderStr = "precision mediump float;  \n" +
-                                "uniform sampler2D uTexMap;\n" +
-                                "varying vec2 vtexture;\n" +
-                               "void main()    \n" +
-                               "{             \n" +
-                               "  gl_FragColor = texture2D( uTexMap, vtexture); \n" +
-                               "}\n";
-
-            _programObject = ShaderHelper.BuildProgram(vShaderStr, fShaderStr);
-            GL.BindAttribLocation(_programObject, 0, "a_position");
-            GL.BindAttribLocation(_programObject, 1, "aTexture");
-            GL.LinkProgram(_programObject);
             int textID = TextureHelper.CreateTexture2D(_directoryInfo.Resource + "1.bmp");
             GL.ActiveTexture(TextureUnit.Texture0);
             // Bind the texture to this unit.
@@ -107,10 +92,10 @@ namespace TizenGameEngine.Renderer.RenderableObjects
 
         public void Draw()
         {
-            GL.UseProgram(_programObject);
-            _positionLoc = GL.GetAttribLocation(_programObject, "a_position");
-            _textureHandle = GL.GetAttribLocation(_programObject, "aTexture");
-            _uniformLoc = GL.GetAttribLocation(_programObject, "uTexMap");
+            GL.UseProgram(_shaderProgram);
+            _positionLoc = GL.GetAttribLocation(_shaderProgram, "a_position");
+            _textureHandle = GL.GetAttribLocation(_shaderProgram, "aTexture");
+            _uniformLoc = GL.GetAttribLocation(_shaderProgram, "uTexMap");
 
             GL.EnableVertexAttribArray(_positionLoc);
             GL.EnableVertexAttribArray(_textureHandle);
@@ -118,7 +103,7 @@ namespace TizenGameEngine.Renderer.RenderableObjects
             {
                 // Prepare the triangle coordinate data
                 GL.VertexAttribPointer(_positionLoc, 3, VertexAttribPointerType.Float, false, 5 * sizeof(float), _vertices);
-                _mvpLoc = GL.GetUniformLocation(_programObject, "u_mvpMatrix");
+                _mvpLoc = GL.GetUniformLocation(_shaderProgram, "u_mvpMatrix");
                 GL.UniformMatrix4(_mvpLoc, false, ref _mvpMatrix);
 
                 fixed (float* atexture = &_vertices[3])
@@ -172,6 +157,11 @@ namespace TizenGameEngine.Renderer.RenderableObjects
             MatrixState.EsRotate(ref _modelview, _rotation.Z, 0.0f, 0.0f, 1.0f);
 
             _mvpMatrix = Matrix4.Mult(_modelview, _perspective.Value);
+        }
+
+        public void Dispose()
+        {
+            GC.SuppressFinalize(this);
         }
     }
 }

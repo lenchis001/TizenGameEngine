@@ -20,18 +20,25 @@ using OpenTK.Input;
 using OpenTK.Platform.Tizen;
 using System.Threading.Tasks;
 using TizenGameEngine.Renderer;
+using TizenGameEngine.Renderer.Services;
 
 namespace CubeTexture
 {
     class TizenGameEngineApplication : TizenGameApplication
     {
         private Renderer _renderer;
+        private readonly IShaderService _shaderService;
+
+        public TizenGameEngineApplication()
+        {
+            _shaderService = new ShaderService();
+        }
 
         protected override void OnCreate()
         {
             base.OnCreate();
 
-            _renderer = new Renderer(DirectoryInfo, Window);
+            _renderer = new Renderer(DirectoryInfo, Window, _shaderService);
             _renderer.UseCamera();
             _renderer.SubscribeToEvents();
 

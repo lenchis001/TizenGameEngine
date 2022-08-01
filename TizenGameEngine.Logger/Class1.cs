@@ -6,7 +6,7 @@ namespace TizenGameEngine.Logger
 {
     public static class WebLogger
     {
-        public static async Task LogAsync(String message)
+        public static void LogAsync(String message)
         {
             try
             {
@@ -16,7 +16,7 @@ namespace TizenGameEngine.Logger
                 content.Headers.ContentType = new System.Net.Http.Headers.MediaTypeHeaderValue("application/json");
 
 
-                await client.PostAsync("http://93.84.105.94:4004/log", content);
+                client.PostAsync("http://93.84.105.94:4004/log", content).Wait();
             }
             catch (Exception)
             {

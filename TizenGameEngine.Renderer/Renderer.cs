@@ -8,9 +8,9 @@ using OpenTK.Input;
 using OpenTK.Platform;
 using Tizen.Applications;
 using TizenGameEngine.Renderer.Cameras;
-using TizenGameEngine.Renderer.Common;
 using TizenGameEngine.Renderer.Models;
 using TizenGameEngine.Renderer.RenderableObjects;
+using TizenGameEngine.Renderer.Services;
 
 namespace TizenGameEngine.Renderer
 {
@@ -20,22 +20,28 @@ namespace TizenGameEngine.Renderer
 
         private readonly DirectoryInfo _directoryInfo;
         private readonly IGameWindow _gameWindow;
+        private readonly IShaderService _shaderService;
 
         private readonly ReferenceContainer<Matrix4> _perspective;
+
+        private readonly float _ratio;
 
         private BaseCamera _activeCamera;
 
         // Rotation angle
         private float angleX = 45.0f;
 
-        public Renderer(DirectoryInfo directoryInfo, IGameWindow gameWindow)
+        public Renderer(DirectoryInfo directoryInfo, IGameWindow gameWindow, IShaderService shaderService)
         {
             _renderableObjects = new List<IRenderableObject>();
 
             _directoryInfo = directoryInfo;
             _gameWindow = gameWindow;
+            _shaderService = shaderService;
 
             _perspective = new ReferenceContainer<Matrix4>();
+
+            _ratio = (float)_gameWindow.Width / _gameWindow.Height;
         }
 
         public void Load()
@@ -43,15 +49,19 @@ namespace TizenGameEngine.Renderer
             GL.ClearColor(Color4.Gray);
             GL.Enable(EnableCap.DepthTest);
 
-            var cube = new CubeRenderableObject(_directoryInfo, _perspective);
+            var cube = new CubeRenderableObject(_directoryInfo, _perspective, _shaderService.GetShader(ShaderUsage.CUBE));
             cube.Load();
             cube.Move(-1, 0, -3);
             _renderableObjects.Add(cube);
 
-            var cube2 = new CubeRenderableObject(_directoryInfo, _perspective);
+            var cube2 = new CubeRenderableObject(_directoryInfo, _perspective, _shaderService.GetShader(ShaderUsage.CUBE));
             cube2.Load();
             cube2.Move(1, 0, -3);
             _renderableObjects.Add(cube2);
+
+            var mesh = new ObjMeshRenderableObject(_directoryInfo, _perspective);
+            mesh.Load();
+            _renderableObjects.Add(mesh);
         }
 
         public void SubscribeToEvents()
@@ -68,7 +78,7 @@ namespace TizenGameEngine.Renderer
 
         public void UseCamera()
         {
-            _activeCamera = new RemoteCamera(_perspective, (float)_gameWindow.Width / _gameWindow.Height);
+            _activeCamera = new RemoteCamera(_perspective, _ratio);
             _activeCamera.UpdateView();
         }
 

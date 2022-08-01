@@ -1,6 +1,8 @@
-﻿namespace TizenGameEngine.Renderer.RenderableObjects
+﻿using System;
+
+namespace TizenGameEngine.Renderer.RenderableObjects
 {
-    public interface IRenderableObject
+    public interface IRenderableObject: IDisposable
     {
         void Load();
 

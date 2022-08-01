@@ -22,16 +22,20 @@
   </ItemGroup>
 
   <ItemGroup>
-    <None Remove="Objects\" />
     <None Remove="Common\" />
     <None Remove="Models\" />
     <None Remove="Cameras\" />
+    <None Remove="Services\" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="RenderableObjects\" />
     <Folder Include="Common\" />
     <Folder Include="Models\" />
     <Folder Include="Cameras\" />
+    <Folder Include="Services\" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\TizenGameEngine.Logger\TizenGameEngine.Logger.csproj" />
   </ItemGroup>
 </Project>
 
