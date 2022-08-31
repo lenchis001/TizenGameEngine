@@ -55,7 +55,7 @@ namespace TizenGameEngine.Renderer
             //cube.Move(-1, 0, -3);
             //_renderableObjects.Add(cube);
 
-            var cube2 = new CubeRenderableObject(_directoryInfo, _perspective, _shaderService.GetShader(ShaderUsage.CUBE));
+            var cube2 = new MemoryCubeRenderableObject(_directoryInfo, _perspective, _shaderService.GetShader(ShaderUsage.CUBE));
             cube2.Load();
             cube2.Move(1, 0, -3);
             _renderableObjects.Add(cube2);
