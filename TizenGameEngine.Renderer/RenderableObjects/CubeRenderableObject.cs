@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Linq;
 using OpenTK;
-using OpenTK.Graphics.ES30;
+using OpenTK.Graphics.ES20;
 using Tizen.Applications;
 using TizenGameEngine.Renderer.Common;
 using TizenGameEngine.Renderer.Models;
@@ -144,7 +144,7 @@ namespace TizenGameEngine.Renderer.RenderableObjects
             _position.Y = y;
             _position.Z = z;
 
-            _recalculateMatrix();
+            RecalculateMatrix();
         }
 
         public void Rotate(float x, float y, float z)
@@ -153,7 +153,7 @@ namespace TizenGameEngine.Renderer.RenderableObjects
             _rotation.Y = y;
             _rotation.Z = z;
 
-            _recalculateMatrix();
+            RecalculateMatrix();
         }
 
         public void Scale(float x, float y, float z)
@@ -162,10 +162,10 @@ namespace TizenGameEngine.Renderer.RenderableObjects
             _scale.Y = y;
             _scale.Z = z;
 
-            _recalculateMatrix();
+            RecalculateMatrix();
         }
 
-        private void _recalculateMatrix()
+        public void RecalculateMatrix()
         {
             MatrixState.EsMatrixLoadIdentity(ref _modelview);
 

@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Linq;
 using OpenTK;
-using OpenTK.Graphics.ES30;
+using OpenTK.Graphics.ES20;
 using Tizen.Applications;
 using TizenGameEngine.Renderer.Common;
 using TizenGameEngine.Renderer.Models;
@@ -9,20 +9,19 @@ using TizenGameEngine.Renderer.Services;
 
 namespace TizenGameEngine.Renderer.RenderableObjects
 {
-    public class MemoryCubeRenderableObject: IRenderableObject
+    public class MemoryCubeRenderableObject : IRenderableObject
     {
         readonly DirectoryInfo _directoryInfo;
         readonly ReferenceContainer<Matrix4> _perspective;
 
-        int _vbo, _vao, _vertexesAmount;
+        int _vbo, _vertexesAmount;
+        int _textureVbo;
         // Handle to a program object
         int _shaderProgram;
         // Attribute locations
         int _uniformLoc;
         // Uniform locations
         int _mvpLoc;
-        // Vertex data
-        float[] _textureCoordinates;
 
         private Vector3 _position, _rotation, _scale;
 
@@ -88,7 +87,7 @@ namespace TizenGameEngine.Renderer.RenderableObjects
             GL.BindTexture(TextureTarget.Texture2D, textID);
             GL.Uniform1(_uniformLoc, 0);
 
-            _textureCoordinates = new float[]
+            var textureCoordinates = new float[]
             {
                 0.0f,1.0f,//0
                 1.0f,1.0f,//1
@@ -117,6 +116,11 @@ namespace TizenGameEngine.Renderer.RenderableObjects
                 0.0f,1.0f,//0
                 1.0f,1.0f,//2
             };
+
+            _textureVbo = GL.GenBuffer();
+            GL.BindBuffer(BufferTarget.ArrayBuffer, _textureVbo);
+            GL.BufferData(BufferTarget.ArrayBuffer, sizeof(float) * textureCoordinates.Length, textureCoordinates.ToArray(), BufferUsageHint.StaticDraw);
+            GL.BindBuffer(BufferTarget.ArrayBuffer, 0);
         }
 
         public void Draw()
@@ -138,11 +142,10 @@ namespace TizenGameEngine.Renderer.RenderableObjects
                 _mvpLoc = GL.GetUniformLocation(_shaderProgram, "u_mvpMatrix");
                 GL.UniformMatrix4(_mvpLoc, false, ref _mvpMatrix);
 
-                fixed (float* atexture = &_textureCoordinates[0])
-                {
-                    // Prepare the triangle coordinate data
-                    GL.VertexAttribPointer(textureHandle, 2, VertexAttribPointerType.Float, false, 2 * sizeof(float), new IntPtr(atexture));
-                }
+                // Prepare the triangle coordinate data
+                GL.BindBuffer(BufferTarget.ArrayBuffer, _textureVbo);
+                GL.VertexAttribPointer(textureHandle, 2, VertexAttribPointerType.Float, false, 2 * sizeof(float), 0);
+                GL.BindBuffer(BufferTarget.ArrayBuffer, 0);
 
                 GL.DrawArrays(PrimitiveType.TriangleStrip, 0, _vertexesAmount);
             }
@@ -157,7 +160,7 @@ namespace TizenGameEngine.Renderer.RenderableObjects
             _position.Y = y;
             _position.Z = z;
 
-            _recalculateMatrix();
+            RecalculateMatrix();
         }
 
         public void Rotate(float x, float y, float z)
@@ -166,7 +169,7 @@ namespace TizenGameEngine.Renderer.RenderableObjects
             _rotation.Y = y;
             _rotation.Z = z;
 
-            _recalculateMatrix();
+            RecalculateMatrix();
         }
 
         public void Scale(float x, float y, float z)
@@ -175,10 +178,10 @@ namespace TizenGameEngine.Renderer.RenderableObjects
             _scale.Y = y;
             _scale.Z = z;
 
-            _recalculateMatrix();
+            RecalculateMatrix();
         }
 
-        private void _recalculateMatrix()
+        public void RecalculateMatrix()
         {
             MatrixState.EsMatrixLoadIdentity(ref _modelview);
 

@@ -1,9 +1,10 @@
 ﻿
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using OpenTK;
 using OpenTK.Graphics;
-using OpenTK.Graphics.ES30;
+using OpenTK.Graphics.ES20;
 using OpenTK.Input;
 using OpenTK.Platform;
 using Tizen.Applications;
@@ -99,6 +100,10 @@ namespace TizenGameEngine.Renderer
         private void _OnKeyDown(object sender, KeyboardKeyEventArgs e)
         {
             _activeCamera.OnKeyDown(e);
+            foreach (var obj in _renderableObjects)
+            {
+                obj.RecalculateMatrix();
+            }
         }
     }
 }

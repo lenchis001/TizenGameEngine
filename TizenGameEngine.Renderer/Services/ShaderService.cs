@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using OpenTK.Graphics.ES30;
+using OpenTK.Graphics.ES20;
 using TizenGameEngine.Renderer.Models;
 
 namespace TizenGameEngine.Renderer.Services

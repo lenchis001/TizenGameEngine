@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Globalization;
 using System.IO;
 using OpenTK;
-using OpenTK.Graphics.ES30;
+using OpenTK.Graphics.ES20;
 using Tizen.Applications;
 using TizenGameEngine.Logger;
 using TizenGameEngine.Renderer.Common;
@@ -62,7 +62,7 @@ namespace TizenGameEngine.Renderer.RenderableObjects
             _mvpLoc = GL.GetUniformLocation(_shaderProgram, "u_mvpMatrix");
             GL.UniformMatrix4(_mvpLoc, false, ref _mvpMatrix);
 
-            GL.BindVertexArray(_vertexArrayObject);
+            //GL.BindVertexArray(_vertexArrayObject);
             GL.DrawArrays(PrimitiveType.Triangles, 0, 3);
         }
 
@@ -188,15 +188,19 @@ namespace TizenGameEngine.Renderer.RenderableObjects
                 GL.BindBuffer(BufferTarget.ArrayBuffer, _vbo);
                 GL.BufferData(BufferTarget.ArrayBuffer, sizeof(float) * vertices.Count, vertices.ToArray(), BufferUsageHint.StaticDraw);
 
-                _vertexArrayObject = GL.GenVertexArray();
-                GL.BindVertexArray(_vertexArrayObject);
+                //_vertexArrayObject = GL.GenVertexArray();
+                //GL.BindVertexArray(_vertexArrayObject);
 
                 GL.VertexAttribPointer(0, 3, VertexAttribPointerType.Float, false, 3 * sizeof(float), 0);
                 GL.EnableVertexAttribArray(0);
 
                 GL.BindBuffer(BufferTarget.ArrayBuffer, 0);
-                GL.BindVertexArray(0);
+                //GL.BindVertexArray(0);
             }
+        }
+
+        public void RecalculateMatrix()
+        {
         }
     }
 }

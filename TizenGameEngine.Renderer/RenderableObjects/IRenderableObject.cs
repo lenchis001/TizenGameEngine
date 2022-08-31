@@ -13,6 +13,8 @@ namespace TizenGameEngine.Renderer.RenderableObjects
         void Scale(float x, float y, float z);
 
         void Rotate(float x, float y, float z);
+
+        void RecalculateMatrix();
     }
 }
 

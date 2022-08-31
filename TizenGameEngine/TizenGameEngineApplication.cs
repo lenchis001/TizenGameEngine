@@ -15,7 +15,7 @@
  *
  */
 using OpenTK;
-using OpenTK.Graphics.ES30;
+using OpenTK.Graphics.ES20;
 using OpenTK.Input;
 using OpenTK.Platform.Tizen;
 using System;
