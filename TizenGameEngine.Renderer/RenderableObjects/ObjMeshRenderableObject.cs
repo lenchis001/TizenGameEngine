@@ -3,16 +3,21 @@ using System.Collections.Generic;
 using System.Globalization;
 using System.IO;
 using OpenTK;
-using OpenTK.Graphics.ES20;
+using OpenTK.Graphics.ES30;
 using Tizen.Applications;
 using TizenGameEngine.Logger;
 using TizenGameEngine.Renderer.Common;
 using TizenGameEngine.Renderer.Models;
+using DirectoryInfo = Tizen.Applications.DirectoryInfo;
 
 namespace TizenGameEngine.Renderer.RenderableObjects
 {
     public class ObjMeshRenderableObject : IRenderableObject
     {
+        private readonly int _shaderProgram;
+
+        private int _vertexBufferObject, _vertexArrayObject;
+
         string _path;
 
         // Handle to a program object
@@ -33,10 +38,14 @@ namespace TizenGameEngine.Renderer.RenderableObjects
 
         readonly Tizen.Applications.DirectoryInfo _directoryInfo;
 
-        public ObjMeshRenderableObject(Tizen.Applications.DirectoryInfo directoryInfo, ReferenceContainer<Matrix4> perspective)
+        public ObjMeshRenderableObject(
+            DirectoryInfo directoryInfo,
+            ReferenceContainer<Matrix4> perspective,
+            int shaderProgram)
         {
             _directoryInfo = directoryInfo;
             _perspective = perspective;
+            _shaderProgram = shaderProgram;
 
             _path = _directoryInfo.Resource + "car.obj";
         }
@@ -49,6 +58,12 @@ namespace TizenGameEngine.Renderer.RenderableObjects
 
         public void Draw()
         {
+            GL.UseProgram(_shaderProgram);
+            _mvpLoc = GL.GetUniformLocation(_shaderProgram, "u_mvpMatrix");
+            GL.UniformMatrix4(_mvpLoc, false, ref _mvpMatrix);
+
+            GL.BindVertexArray(_vertexArrayObject);
+            GL.DrawArrays(PrimitiveType.Triangles, 0, 3);
         }
 
         public void Move(float x, float y, float z)
@@ -172,13 +187,16 @@ namespace TizenGameEngine.Renderer.RenderableObjects
                 _vbo = GL.GenBuffer();
                 GL.BindBuffer(BufferTarget.ArrayBuffer, _vbo);
                 GL.BufferData(BufferTarget.ArrayBuffer, sizeof(float) * vertices.Count, vertices.ToArray(), BufferUsageHint.StaticDraw);
+
+                _vertexArrayObject = GL.GenVertexArray();
+                GL.BindVertexArray(_vertexArrayObject);
+
+                GL.VertexAttribPointer(0, 3, VertexAttribPointerType.Float, false, 3 * sizeof(float), 0);
+                GL.EnableVertexAttribArray(0);
+
                 GL.BindBuffer(BufferTarget.ArrayBuffer, 0);
+                GL.BindVertexArray(0);
             }
-        }
-
-        private void _CreateShaders()
-        {
-
         }
     }
 }

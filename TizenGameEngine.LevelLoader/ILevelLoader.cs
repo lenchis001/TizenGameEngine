@@ -6,8 +6,8 @@ namespace TizenGameEngine.LevelLoader
 {
     public interface ILevelLoader
     {
-        public Level LoadFile(String path);
-        public Level LoadContent(String path);
+        Level LoadFile(String path);
+        Level LoadContent(String path);
     }
 }
 

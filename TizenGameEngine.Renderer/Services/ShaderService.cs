@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
-using OpenTK.Graphics.ES20;
+using System.Linq;
+using OpenTK.Graphics.ES30;
 using TizenGameEngine.Renderer.Models;
 
 namespace TizenGameEngine.Renderer.Services
@@ -15,9 +16,9 @@ namespace TizenGameEngine.Renderer.Services
                 new ShaderDescriptor{
                     VertexShaderSource =
                           "uniform mat4 u_mvpMatrix;              \n" +
-                          "attribute vec2 aTexture;                      \n" +
-                          "attribute vec4 a_position;                  \n" +
-                          "varying vec2 vtexture;\n" +
+                          "vec2 aTexture;                      \n" +
+                          "vec4 a_position;                  \n" +
+                          "vec2 vtexture;\n" +
                           "void main()                                 \n" +
                           "{                                           \n" +
                           "   vtexture = aTexture;  \n" +
@@ -32,6 +33,31 @@ namespace TizenGameEngine.Renderer.Services
                           "  gl_FragColor = texture2D( uTexMap, vtexture); \n" +
                           "}\n",
                     Arguments = new []{ "a_position", "aTexture" }
+                }
+            },
+
+            {
+                ShaderUsage.MESH,
+                new ShaderDescriptor{
+                    VertexShaderSource =
+                          "# version 320 es\n" +
+                          "uniform mat4 u_mvpMatrix\n" +
+                          "in vec3 aPosition;\n" +
+                          "\n" +
+                          "void main()\n" +
+                          "{\n" +
+                                "gl_Position = vec4(aPosition, 1.0) * u_mvpMatrix;\n" +
+                          "}",
+                    FragmentShader =
+                          "# version 320 es\n" +
+                          "precision mediump float;  \n" +
+                          "out vec4 FragColor;\n" +
+                          "\n"+
+                          "void main()\n" +
+                          "{\n" +
+                                "FragColor = vec4(1.0f, 0.5f, 0.2f, 1.0f);\n" +
+                          "}",
+                    Arguments = Enumerable.Empty<string>().ToArray()
                 }
             }
         };
@@ -63,7 +89,8 @@ namespace TizenGameEngine.Renderer.Services
         {
             var sources = _shaderSources[usage];
 
-            _shaderPrograms[usage] = CreateShaderProgram(sources.VertexShaderSource, sources.FragmentShader, sources.Arguments);
+            _shaderPrograms[usage] = 0;
+            CreateShaderProgram(sources.VertexShaderSource, sources.FragmentShader, sources.Arguments);
         }
 
         private int CreateShaderProgram(string vertexShaderSourceCode, string fragmentShaderSourceCode, ICollection<string> argumentsSetup)
@@ -74,7 +101,7 @@ namespace TizenGameEngine.Renderer.Services
             GL.CompileShader(vertexShader);
 
             GL.GetShader(vertexShader, ShaderParameter.CompileStatus, out int vertexShaderErrorCode);
-            if (vertexShaderErrorCode == 0)
+            if (vertexShaderErrorCode != (int)All.True)
             {
                 string infoLog = GL.GetShaderInfoLog(vertexShader);
                 throw new ShaderCreatingException(infoLog);
@@ -86,7 +113,7 @@ namespace TizenGameEngine.Renderer.Services
             GL.CompileShader(fragmentShader);
 
             GL.GetShader(fragmentShader, ShaderParameter.CompileStatus, out int fragmentShaderErrorCode);
-            if (fragmentShaderErrorCode == 0)
+            if (fragmentShaderErrorCode != (int)All.True)
             {
                 string infoLog = GL.GetShaderInfoLog(fragmentShader);
                 throw new ShaderCreatingException(infoLog);
@@ -101,17 +128,17 @@ namespace TizenGameEngine.Renderer.Services
             GL.LinkProgram(programHandle);
 
             GL.GetProgram(programHandle, GetProgramParameterName.LinkStatus, out int shaderProgramErrorCode);
-            if (shaderProgramErrorCode == 0)
+            if (shaderProgramErrorCode != (int)All.True)
             {
                 string infoLog = GL.GetProgramInfoLog(programHandle);
                 throw new ShaderCreatingException(infoLog);
             }
 
-            // Clean Up
-            GL.DetachShader(programHandle, vertexShader);
-            GL.DetachShader(programHandle, fragmentShader);
-            GL.DeleteShader(vertexShader);
-            GL.DeleteShader(fragmentShader);
+            //// Clean Up
+            //GL.DetachShader(programHandle, vertexShader);
+            //GL.DetachShader(programHandle, fragmentShader);
+            //GL.DeleteShader(vertexShader);
+            //GL.DeleteShader(fragmentShader);
 
             return programHandle;
         }

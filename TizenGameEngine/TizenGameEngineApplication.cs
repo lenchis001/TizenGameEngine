@@ -15,10 +15,12 @@
  *
  */
 using OpenTK;
-using OpenTK.Graphics.ES20;
+using OpenTK.Graphics.ES30;
 using OpenTK.Input;
 using OpenTK.Platform.Tizen;
+using System;
 using System.Threading.Tasks;
+using TizenGameEngine.Logger;
 using TizenGameEngine.Renderer;
 using TizenGameEngine.Renderer.Services;
 
@@ -55,15 +57,25 @@ namespace CubeTexture
 
         protected override void OnTerminate()
         {
-            base.OnTerminate();
-
+            _shaderService.Dispose();
             _renderer.UnsubscribeFromEvents();
+
+            base.OnTerminate();
         }
 
         static void Main(string[] args)
         {
-            var app = new TizenGameEngineApplication() { GLMajor = 2, GLMinor = 0 };
-            app.Run(args);
+            try
+            {
+                var app = new TizenGameEngineApplication() { GLMajor = 3, GLMinor = 0 };
+                app.Run(args);
+            }
+            catch(Exception e)
+            {
+                WebLogger.LogAsync("An error ocured.");
+                WebLogger.LogAsync(e.Message);
+                WebLogger.LogAsync(e.StackTrace);
+            }
         }
     }
 

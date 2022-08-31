@@ -1,18 +1,19 @@
 ﻿using System;
 using System.Net.Http;
+using System.Text;
 using System.Threading.Tasks;
 
 namespace TizenGameEngine.Logger
 {
     public static class WebLogger
     {
-        public static void LogAsync(String message)
+        public static void LogAsync(String message, bool encode = false)
         {
             try
             {
                 var client = new HttpClient();
 
-                var content = new StringContent($"{{ \"message\":\"{message}\" }}");
+                var content = new StringContent($"{{ \"message\":\"{Convert.ToBase64String(Encoding.UTF8.GetBytes(message))}\" }}");
                 content.Headers.ContentType = new System.Net.Http.Headers.MediaTypeHeaderValue("application/json");
 
 
@@ -20,7 +21,7 @@ namespace TizenGameEngine.Logger
             }
             catch (Exception)
             {
-
+                
             }
         }
     }

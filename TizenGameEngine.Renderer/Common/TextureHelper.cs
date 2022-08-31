@@ -14,7 +14,7 @@
  * limitations under the License.
  *
  */
-using OpenTK.Graphics.ES20;
+using OpenTK.Graphics.ES30;
 
 namespace TizenGameEngine.Renderer.Common
 {

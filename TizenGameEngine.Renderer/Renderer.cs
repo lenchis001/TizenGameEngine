@@ -3,10 +3,11 @@ using System;
 using System.Collections.Generic;
 using OpenTK;
 using OpenTK.Graphics;
-using OpenTK.Graphics.ES20;
+using OpenTK.Graphics.ES30;
 using OpenTK.Input;
 using OpenTK.Platform;
 using Tizen.Applications;
+using TizenGameEngine.Logger;
 using TizenGameEngine.Renderer.Cameras;
 using TizenGameEngine.Renderer.Models;
 using TizenGameEngine.Renderer.RenderableObjects;
@@ -49,19 +50,20 @@ namespace TizenGameEngine.Renderer
             GL.ClearColor(Color4.Gray);
             GL.Enable(EnableCap.DepthTest);
 
-            var cube = new CubeRenderableObject(_directoryInfo, _perspective, _shaderService.GetShader(ShaderUsage.CUBE));
-            cube.Load();
-            cube.Move(-1, 0, -3);
-            _renderableObjects.Add(cube);
+            //var cube = new CubeRenderableObject(_directoryInfo, _perspective, _shaderService.GetShader(ShaderUsage.CUBE));
+            //cube.Load();
+            //cube.Move(-1, 0, -3);
+            //_renderableObjects.Add(cube);
 
             var cube2 = new CubeRenderableObject(_directoryInfo, _perspective, _shaderService.GetShader(ShaderUsage.CUBE));
             cube2.Load();
             cube2.Move(1, 0, -3);
             _renderableObjects.Add(cube2);
 
-            var mesh = new ObjMeshRenderableObject(_directoryInfo, _perspective);
-            mesh.Load();
-            _renderableObjects.Add(mesh);
+                //var mesh = new ObjMeshRenderableObject(_directoryInfo, _perspective, _shaderService.GetShader(ShaderUsage.MESH));
+                //mesh.Load();
+                //cube2.Move(-1, 0, -3);
+                //_renderableObjects.Add(mesh);
         }
 
         public void SubscribeToEvents()
@@ -88,7 +90,6 @@ namespace TizenGameEngine.Renderer
 
             foreach (var renderableObject in _renderableObjects)
             {
-                renderableObject.Rotate(angleX, 0, 0);
                 renderableObject.Draw();
             }
 
