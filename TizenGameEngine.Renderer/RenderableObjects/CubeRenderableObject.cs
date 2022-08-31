@@ -22,8 +22,7 @@ namespace TizenGameEngine.Renderer.RenderableObjects
         int _mvpLoc, _textureHandle;
         // Vertex data
         float[] _vertices;
-        // Attribute locations
-        ushort[] _indices;
+        float[] _textureCoordinates;
 
         private Vector3 _position, _rotation, _scale;
 
@@ -51,42 +50,62 @@ namespace TizenGameEngine.Renderer.RenderableObjects
             GL.Uniform1(_uniformLoc, 0);
             _vertices = new float[]
             {
-                -0.5f, 0.5f, 0.5f, 0.0f,1.0f,//0
-                0.5f, 0.5f,  0.5f, 1.0f,1.0f,//1
-                -0.5f, 0.5f,  -0.5f, 0.0f,0.0f,//2
-                0.5f, 0.5f, -0.5f, 1.0f,0.0f,//3
-                -0.5f,  -0.5f, -0.5f, 0.0f,1.0f,//4
-                0.5f,  -0.5f,  -0.5f, 1.0f,1.0f,//5
-                -0.5f, -0.5f, 0.5f, 0.0f,0.0f,//6
-                0.5f,  -0.5f,  0.5f, 1.0f, 0.0f,//7
+                -0.5f, 0.5f, 0.5f,//0
+                0.5f, 0.5f,  0.5f,//1
+                -0.5f, 0.5f,  -0.5f,//2
+                0.5f, 0.5f, -0.5f,//3
+                -0.5f,  -0.5f, -0.5f,//4
+                0.5f,  -0.5f,  -0.5f,//5
+                -0.5f, -0.5f, 0.5f,//6
+                0.5f,  -0.5f,  0.5f,//7
 
-                -0.5f, 0.5f, 0.5f, 0.0f,1.0f,//0
-                0.5f, 0.5f,  0.5f, 1.0f,1.0f,//1
-                0.5f, 0.5f,  0.5f, 1.0f,1.0f,//1
-                0.5f, 0.5f, -0.5f, 1.0f,0.0f,//3
+                -0.5f, 0.5f, 0.5f,//0
+                0.5f, 0.5f,  0.5f,//1
+                0.5f, 0.5f,  0.5f,//1
+                0.5f, 0.5f, -0.5f,//3
 
-                0.5f, 0.5f, -0.5f, 1.0f,1.0f,//3
-                0.5f, 0.5f,  0.5f, 0.0f,1.0f,//1
-                0.5f,  -0.5f,  -0.5f, 1.0f,0.0f,//5
-                0.5f,  -0.5f,  0.5f, 0.0f, 0.0f,//7
+                0.5f, 0.5f, -0.5f,//3
+                0.5f, 0.5f,  0.5f,//1
+                0.5f,  -0.5f,  -0.5f,//5
+                0.5f,  -0.5f,  0.5f,//7
                 
-                0.5f,  -0.5f,  0.5f, 1.0f, 0.0f,//7
-                -0.5f, -0.5f, 0.5f, 0.0f,0.0f,//6
+                0.5f,  -0.5f,  0.5f,//7
+                -0.5f, -0.5f, 0.5f,//6
 
-                -0.5f, -0.5f, 0.5f, 0.0f,0.0f,//6
-                -0.5f,  -0.5f, -0.5f, 1.0f,0.0f,//4
-                -0.5f, 0.5f, 0.5f, 0.0f,1.0f,//0
-                -0.5f, 0.5f,  -0.5f, 1.0f,1.0f,//2
+                -0.5f, -0.5f, 0.5f,//6
+                -0.5f,  -0.5f, -0.5f,//4
+                -0.5f, 0.5f, 0.5f,//0
+                -0.5f, 0.5f,  -0.5f,//2
             };
 
-            _indices = new ushort[]
+            _textureCoordinates = new float[]
             {
-                0, 2, 1,3,//up
-				6,5,//right
-				7,4,//below
-				0,2,//left
-				4,3,5,2,//back
-				7,6,0,1 //front
+                0.0f,1.0f,//0
+                1.0f,1.0f,//1
+                0.0f,0.0f,//2
+                1.0f,0.0f,//3
+                0.0f,1.0f,//4
+                1.0f,1.0f,//5
+                0.0f,0.0f,//6
+                1.0f, 0.0f,//7
+
+                0.0f,1.0f,//0
+                1.0f,1.0f,//1
+                1.0f,1.0f,//1
+                1.0f,0.0f,//3
+
+                1.0f,1.0f,//3
+                0.0f,1.0f,//1
+                1.0f,0.0f,//5
+                0.0f, 0.0f,//7
+                
+                1.0f, 0.0f,//7
+                0.0f,0.0f,//6
+
+                0.0f,0.0f,//6
+                1.0f,0.0f,//4
+                0.0f,1.0f,//0
+                1.0f,1.0f,//2
             };
         }
 
@@ -102,17 +121,17 @@ namespace TizenGameEngine.Renderer.RenderableObjects
             unsafe
             {
                 // Prepare the triangle coordinate data
-                GL.VertexAttribPointer(_positionLoc, 3, VertexAttribPointerType.Float, false, 5 * sizeof(float), _vertices);
+                GL.VertexAttribPointer(_positionLoc, 3, VertexAttribPointerType.Float, false, 3 * sizeof(float), _vertices);
                 _mvpLoc = GL.GetUniformLocation(_shaderProgram, "u_mvpMatrix");
                 GL.UniformMatrix4(_mvpLoc, false, ref _mvpMatrix);
 
-                fixed (float* atexture = &_vertices[3])
+                fixed (float* atexture = &_textureCoordinates[0])
                 {
                     // Prepare the triangle coordinate data
-                    GL.VertexAttribPointer(_textureHandle, 2, VertexAttribPointerType.Float, false, 5 * sizeof(float), new IntPtr(atexture));
+                    GL.VertexAttribPointer(_textureHandle, 2, VertexAttribPointerType.Float, false, 2 * sizeof(float), new IntPtr(atexture));
                 }
 
-                GL.DrawArrays(PrimitiveType.TriangleStrip, 0, _vertices.Length / 5);
+                GL.DrawArrays(PrimitiveType.TriangleStrip, 0, _vertices.Length / 3);
             }
             // Disable vertex array
             GL.DisableVertexAttribArray(_positionLoc);
