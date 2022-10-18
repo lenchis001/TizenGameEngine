@@ -58,7 +58,6 @@ namespace CubeTexture
         protected override void OnTerminate()
         {
             _shaderService.Dispose();
-            _renderer.UnsubscribeFromEvents();
 
             base.OnTerminate();
         }
