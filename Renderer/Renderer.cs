@@ -83,15 +83,13 @@ namespace TizenGameEngine.Renderer
             }
         }
 
-        float a = 0;
         private void _OnKeyDown(object sender, KeyboardKeyEventArgs e)
-        {
-            //_activeCamera.OnKeyDown(e);
-            _renderableObjects.First().Rotate(0, a++, 0);
-            //foreach (var obj in _renderableObjects)
-            //{
-            //    obj.RecalculateMatrix();
-            //}
+        {            
+            _activeCamera.OnKeyDown(e);
+            foreach (var obj in _renderableObjects)
+            {
+                obj.RecalculateMatrix();
+            }
         }
     }
 }

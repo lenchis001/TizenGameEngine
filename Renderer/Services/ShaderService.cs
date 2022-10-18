@@ -30,8 +30,7 @@ namespace TizenGameEngine.Renderer.Services
                           "varying vec2 vtexture;\n" +
                           "void main()    \n" +
                           "{             \n" +
-                                "gl_FragColor = vec4(1.0f, 0.5f, 0.2f, 0.5f);\n" +
-                          //"  gl_FragColor = texture2D(uTexMap, vtexture); \n" +
+                          "  gl_FragColor = texture2D(uTexMap, vtexture); \n" +
                           "}\n",
                     Arguments = new []{ "a_position", "aTexture" }
                 }

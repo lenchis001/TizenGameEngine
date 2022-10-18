@@ -40,12 +40,20 @@ namespace CubeTexture
         {
             base.OnCreate();
 
-            _renderer = new Renderer(_shaderService, Window.Width/Window.Height, DirectoryInfo.Resource);
+            _renderer = new Renderer(_shaderService, (float)Window.Width/Window.Height, DirectoryInfo.Resource);
             _renderer.UseCamera();
+            Window.RenderFrame += _OnRenderFrame;
 
             GL.Viewport(0, 0, Window.Width, Window.Height);
 
             _renderer.Load();
+        }
+
+        private void _OnRenderFrame(object sender, FrameEventArgs e)
+        {
+            _renderer.RenderFrame();
+
+            Window.SwapBuffers();
         }
 
         protected override void OnResume()
@@ -56,6 +64,7 @@ namespace CubeTexture
 
         protected override void OnTerminate()
         {
+            Window.RenderFrame -= _OnRenderFrame;
             _shaderService.Dispose();
 
             base.OnTerminate();
