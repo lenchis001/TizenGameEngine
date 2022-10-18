@@ -1,0 +1,60 @@
+﻿using System;
+using System.IO;
+using OpenTK;
+using OpenTK.Windowing.Desktop;
+using TizenGameEngine.Renderer;
+using TizenGameEngine.Renderer.Services;
+using OpenTK.Graphics.ES20;
+using System.ComponentModel;
+using OpenTK.Windowing.Common;
+using OpenTK.Mathematics;
+
+namespace BlankWindow
+{
+    sealed class Program : OpenTK.Windowing.Desktop.GameWindow
+    {
+		public Program(GameWindowSettings gameWindowSettings, NativeWindowSettings nativeWindowSettings) : base(gameWindowSettings, nativeWindowSettings)
+        {
+            _shaderService = new ShaderService();
+        }
+
+        private Renderer _renderer;
+        private readonly IShaderService _shaderService;
+
+        protected override void OnLoad()
+        {
+            _renderer = new Renderer(_shaderService, this.ClientSize.X/ this.ClientSize.Y, Directory.GetCurrentDirectory());
+            _renderer.UseCamera();
+
+            GL.Viewport(0, 0, this.ClientSize.X, this.ClientSize.Y);
+
+            _renderer.Load();
+
+            base.OnLoad();
+        }
+
+		protected override void OnRenderFrame(FrameEventArgs args)
+		{
+            _renderer.RenderFrame();
+
+            Context.SwapBuffers();
+
+            base.OnRenderFrame(args);
+        }
+
+		protected override void OnClosing(CancelEventArgs e)
+		{
+			base.OnClosing(e);
+            _shaderService.Dispose();
+        }
+
+		[STAThread]
+        public static void Main()
+        {
+            var gws = new GameWindowSettings();
+            var nws = new NativeWindowSettings();
+            var program = new Program(gws, nws);
+            program.Run();
+        }
+    }
+}

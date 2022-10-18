@@ -1,0 +1,30 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <MSBuildAllProjects Condition="'$(MSBuildVersion)' == '' Or '$(MSBuildVersion)' &lt; '16.0'">$(MSBuildAllProjects);$(MSBuildThisFileFullPath)</MSBuildAllProjects>
+    <HasSharedItems>true</HasSharedItems>
+    <SharedGUID>a454ee5a-0a63-4913-9867-3f3b4e73bd4e</SharedGUID>
+  </PropertyGroup>
+  <PropertyGroup Label="Configuration">
+    <Import_RootNamespace>Renderer</Import_RootNamespace>
+  </PropertyGroup>
+  <ItemGroup>
+    <Compile Include="$(MSBuildThisFileDirectory)Cameras\BaseCamera.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Cameras\RemoteCamera.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Common\MatrixState.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Common\MImageUtil.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Common\TextureHelper.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Models\ReferenceContainer.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Models\ShaderCreatingException.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Models\ShaderDescriptor.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Models\ShaderUsage.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)RenderableObjects\CubeRenderableObject.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)RenderableObjects\IRenderableObject.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)RenderableObjects\MemoryCubeRenderableObject.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)RenderableObjects\NObjMeshRenderableObject.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)RenderableObjects\ObjMeshRenderableObject.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Renderer.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Services\IShaderService.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Services\ShaderService.cs" />
+  </ItemGroup>
+</Project>

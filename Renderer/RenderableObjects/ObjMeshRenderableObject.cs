@@ -2,108 +2,68 @@
 using System.Collections.Generic;
 using System.Globalization;
 using System.IO;
-using System.Linq;
+#if TIZEN
 using OpenTK;
+#else
+using OpenTK.Mathematics;
+#endif
 using OpenTK.Graphics.ES20;
-using Tizen.Applications;
-using TizenGameEngine.Logger;
 using TizenGameEngine.Renderer.Common;
 using TizenGameEngine.Renderer.Models;
-using TizenGameEngine.Renderer.Services;
-using DirectoryInfo = Tizen.Applications.DirectoryInfo;
 
 namespace TizenGameEngine.Renderer.RenderableObjects
 {
-    public class NObjMeshRenderableObject : IRenderableObject
+    public class ObjMeshRenderableObject : IRenderableObject
     {
-        readonly DirectoryInfo _directoryInfo;
-        readonly ReferenceContainer<Matrix4> _perspective;
+        private readonly string _resourcesPath;
+        private readonly int _shaderProgram;
 
-        int _vbo, _textureVbo, _vertexesAmount;
+        private int _vertexBufferObject, _vertexArrayObject;
+
+        string _path;
+
         // Handle to a program object
-        int _shaderProgram;
+        int _programObject;
         // Attribute locations
-        int _uniformLoc;
+        int _positionLoc, _uniformLoc;
         // Uniform locations
-        int _mvpLoc;
+        int _mvpLoc, _textureHandle;
+
+        int _vbo, _shader;
 
         private Vector3 _position, _rotation, _scale;
 
-        private string _path;
-
         // MVP matrix
+        readonly ReferenceContainer<Matrix4> _perspective;
         Matrix4 _mvpMatrix;
         Matrix4 _modelview;
-        private bool disposedValue;
 
-        public NObjMeshRenderableObject(
-            DirectoryInfo directoryInfo,
+        public ObjMeshRenderableObject(
+            string resourcesPath,
             ReferenceContainer<Matrix4> perspective,
             int shaderProgram)
         {
-            _directoryInfo = directoryInfo;
+            _resourcesPath = resourcesPath;
             _perspective = perspective;
             _shaderProgram = shaderProgram;
 
-            _path = _directoryInfo.Resource + "car.obj";
+            _path = _resourcesPath + "car.obj";
         }
 
         public void Load()
         {
-            var (vertices, textureCoordinates) = _LoadMeshFile();
+            _LoadMeshFile();
 
-            WebLogger.LogAsync($"Amount: {vertices.Length}");
-
-            _vertexesAmount = vertices.Length;
-
-            _vbo = GL.GenBuffer();
-            GL.BindBuffer(BufferTarget.ArrayBuffer, _vbo);
-            GL.BufferData(BufferTarget.ArrayBuffer, sizeof(float) * vertices.Length, vertices, BufferUsageHint.StaticDraw);
-            GL.BindBuffer(BufferTarget.ArrayBuffer, 0);
-
-            // -------------------------
-
-            int textID = TextureHelper.CreateTexture2D(_directoryInfo.Resource + "1.bmp");
-            GL.ActiveTexture(TextureUnit.Texture0);
-            // Bind the texture to this unit.
-            GL.BindTexture(TextureTarget.Texture2D, textID);
-            GL.Uniform1(_uniformLoc, 0);
-
-            _textureVbo = GL.GenBuffer();
-            GL.BindBuffer(BufferTarget.ArrayBuffer, _textureVbo);
-            GL.BufferData(BufferTarget.ArrayBuffer, sizeof(float) * textureCoordinates.Length, textureCoordinates, BufferUsageHint.StaticDraw);
-            GL.BindBuffer(BufferTarget.ArrayBuffer, 0);
         }
 
         public void Draw()
         {
             GL.UseProgram(_shaderProgram);
-            var positionLoc = GL.GetAttribLocation(_shaderProgram, "a_position");
-            var textureHandle = GL.GetAttribLocation(_shaderProgram, "aTexture");
-            _uniformLoc = GL.GetAttribLocation(_shaderProgram, "uTexMap");
+            _mvpLoc = GL.GetUniformLocation(_shaderProgram, "u_mvpMatrix");
+            GL.UniformMatrix4(_mvpLoc, false, ref _mvpMatrix);
 
-            GL.EnableVertexAttribArray(positionLoc);
-            GL.EnableVertexAttribArray(textureHandle);
-            unsafe
-            {
-                // Prepare the triangle coordinate data
-                GL.BindBuffer(BufferTarget.ArrayBuffer, _vbo);
-                GL.VertexAttribPointer(positionLoc, 3, VertexAttribPointerType.Float, false, 3 * sizeof(float), 0);
-                GL.BindBuffer(BufferTarget.ArrayBuffer, 0);
-
-                _mvpLoc = GL.GetUniformLocation(_shaderProgram, "u_mvpMatrix");
-                GL.UniformMatrix4(_mvpLoc, false, ref _mvpMatrix);
-
-                // Prepare the triangle coordinate data
-                GL.BindBuffer(BufferTarget.ArrayBuffer, _textureVbo);
-                GL.VertexAttribPointer(textureHandle, 2, VertexAttribPointerType.Float, false, 2 * sizeof(float), 0);
-                GL.BindBuffer(BufferTarget.ArrayBuffer, 0);
-
-                GL.DrawArrays(PrimitiveType.LineLoop, 0, _vertexesAmount);
-            }
-            // Disable vertex array
-            GL.DisableVertexAttribArray(positionLoc);
-            GL.DisableVertexAttribArray(textureHandle);
+            //GL.BindVertexArray(_vertexArrayObject);
+            GL.DrawArrays(PrimitiveType.Triangles, 0, 3);
         }
 
         public void Move(float x, float y, float z)
@@ -112,7 +72,7 @@ namespace TizenGameEngine.Renderer.RenderableObjects
             _position.Y = y;
             _position.Z = z;
 
-            RecalculateMatrix();
+            _recalculateMatrix();
         }
 
         public void Rotate(float x, float y, float z)
@@ -121,7 +81,7 @@ namespace TizenGameEngine.Renderer.RenderableObjects
             _rotation.Y = y;
             _rotation.Z = z;
 
-            RecalculateMatrix();
+            _recalculateMatrix();
         }
 
         public void Scale(float x, float y, float z)
@@ -130,10 +90,10 @@ namespace TizenGameEngine.Renderer.RenderableObjects
             _scale.Y = y;
             _scale.Z = z;
 
-            RecalculateMatrix();
+            _recalculateMatrix();
         }
 
-        public void RecalculateMatrix()
+        private void _recalculateMatrix()
         {
             MatrixState.EsMatrixLoadIdentity(ref _modelview);
 
@@ -149,26 +109,24 @@ namespace TizenGameEngine.Renderer.RenderableObjects
         public void Dispose()
         {
             GL.DeleteBuffer(_vbo);
-            GL.DeleteBuffer(_textureVbo);
             GC.SuppressFinalize(this);
         }
 
-        private (float[], float[]) _LoadMeshFile()
+        private void _LoadMeshFile()
         {
             if (!File.Exists(_path))
             {
                 throw new FileNotFoundException("Unable to open \"" + _path + "\", does not exist.");
             }
 
-            var vertices = new List<float>();
-            var textureVertices = new List<float>();
-            List<Vector3> normals = new List<Vector3>();
-            List<uint> vertexIndices = new List<uint>();
-            List<uint> textureIndices = new List<uint>();
-            List<uint> normalIndices = new List<uint>();
-
             using (StreamReader streamReader = new StreamReader(_path))
             {
+                var vertices = new List<float>();
+                List<Vector3> textureVertices = new List<Vector3>();
+                List<Vector3> normals = new List<Vector3>();
+                List<uint> vertexIndices = new List<uint>();
+                List<uint> textureIndices = new List<uint>();
+                List<uint> normalIndices = new List<uint>();
 
                 while (!streamReader.EndOfStream)
                 {
@@ -193,9 +151,8 @@ namespace TizenGameEngine.Renderer.RenderableObjects
                             break;
 
                         case "vt":
-                            textureVertices.Add(float.Parse(words[0]));
-                            textureVertices.Add(float.Parse(words[1]));
-                            //textureVertices.Add(float.Parse(words[2]));
+                            textureVertices.Add(new Vector3(float.Parse(words[0]), float.Parse(words[1]),
+                                                            words.Count < 3 ? 0 : float.Parse(words[2])));
                             break;
 
                         case "vn":
@@ -227,8 +184,10 @@ namespace TizenGameEngine.Renderer.RenderableObjects
                     }
                 }
             }
+        }
 
-            return (vertices.ToArray(), textureVertices.ToArray());
+        public void RecalculateMatrix()
+        {
         }
     }
 }

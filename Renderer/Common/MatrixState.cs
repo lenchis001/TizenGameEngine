@@ -15,7 +15,11 @@
  *
  */
 using System;
+#if TIZEN
 using OpenTK;
+#else
+using OpenTK.Mathematics;
+#endif
 
 namespace TizenGameEngine.Renderer.Common
 {

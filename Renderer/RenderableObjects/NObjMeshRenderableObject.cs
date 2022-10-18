@@ -1,17 +1,21 @@
 ﻿using System;
-using System.Linq;
+using System.Collections.Generic;
+using System.Globalization;
+using System.IO;
+#if TIZEN
 using OpenTK;
+#else
+using OpenTK.Mathematics;
+#endif
 using OpenTK.Graphics.ES20;
-using Tizen.Applications;
 using TizenGameEngine.Renderer.Common;
 using TizenGameEngine.Renderer.Models;
-using TizenGameEngine.Renderer.Services;
 
 namespace TizenGameEngine.Renderer.RenderableObjects
 {
-    public class MemoryCubeRenderableObject : IRenderableObject
+    public class NObjMeshRenderableObject : IRenderableObject
     {
-        readonly DirectoryInfo _directoryInfo;
+        readonly string _resourcesPath;
         readonly ReferenceContainer<Matrix4> _perspective;
 
         int _vbo, _textureVbo, _vertexesAmount;
@@ -24,101 +28,47 @@ namespace TizenGameEngine.Renderer.RenderableObjects
 
         private Vector3 _position, _rotation, _scale;
 
+        private string _path;
+
         // MVP matrix
         Matrix4 _mvpMatrix;
         Matrix4 _modelview;
         private bool disposedValue;
 
-        public MemoryCubeRenderableObject(
-            DirectoryInfo directoryInfo,
+        public NObjMeshRenderableObject(
+            string resourcesPath,
             ReferenceContainer<Matrix4> perspective,
             int shaderProgram)
         {
-            _directoryInfo = directoryInfo;
+            _resourcesPath = resourcesPath;
             _perspective = perspective;
             _shaderProgram = shaderProgram;
+
+            _path = resourcesPath + "car.obj";
         }
 
         public void Load()
         {
-            var vertices = new float[]
-            {
-                -0.5f, 0.5f, 0.5f,//0
-                0.5f, 0.5f,  0.5f,//1
-                -0.5f, 0.5f,  -0.5f,//2
-                0.5f, 0.5f, -0.5f,//3
-                -0.5f,  -0.5f, -0.5f,//4
-                0.5f,  -0.5f,  -0.5f,//5
-                -0.5f, -0.5f, 0.5f,//6
-                0.5f,  -0.5f,  0.5f,//7
-
-                -0.5f, 0.5f, 0.5f,//0
-                0.5f, 0.5f,  0.5f,//1
-                0.5f, 0.5f,  0.5f,//1
-                0.5f, 0.5f, -0.5f,//3
-
-                0.5f, 0.5f, -0.5f,//3
-                0.5f, 0.5f,  0.5f,//1
-                0.5f,  -0.5f,  -0.5f,//5
-                0.5f,  -0.5f,  0.5f,//7
-                
-                0.5f,  -0.5f,  0.5f,//7
-                -0.5f, -0.5f, 0.5f,//6
-
-                -0.5f, -0.5f, 0.5f,//6
-                -0.5f,  -0.5f, -0.5f,//4
-                -0.5f, 0.5f, 0.5f,//0
-                -0.5f, 0.5f,  -0.5f,//2
-            };
+            var (vertices, textureCoordinates) = _LoadMeshFile();
 
             _vertexesAmount = vertices.Length;
 
             _vbo = GL.GenBuffer();
             GL.BindBuffer(BufferTarget.ArrayBuffer, _vbo);
-            GL.BufferData(BufferTarget.ArrayBuffer, sizeof(float) * vertices.Length, vertices.ToArray(), BufferUsageHint.StaticDraw);
+            GL.BufferData(BufferTarget.ArrayBuffer, sizeof(float) * vertices.Length, vertices, BufferUsageHint.StaticDraw);
             GL.BindBuffer(BufferTarget.ArrayBuffer, 0);
 
             // -------------------------
 
-            int textID = TextureHelper.CreateTexture2D(_directoryInfo.Resource + "1.bmp");
+            int textID = TextureHelper.CreateTexture2D(_resourcesPath + "1.bmp");
             GL.ActiveTexture(TextureUnit.Texture0);
             // Bind the texture to this unit.
             GL.BindTexture(TextureTarget.Texture2D, textID);
             GL.Uniform1(_uniformLoc, 0);
 
-            var textureCoordinates = new float[]
-            {
-                0.0f,1.0f,//0
-                1.0f,1.0f,//1
-                0.0f,0.0f,//2
-                1.0f,0.0f,//3
-                0.0f,1.0f,//4
-                1.0f,1.0f,//5
-                0.0f,0.0f,//6
-                1.0f, 0.0f,//7
-
-                0.0f,1.0f,//0
-                1.0f,1.0f,//1
-                1.0f,1.0f,//1
-                1.0f,0.0f,//3
-
-                1.0f,1.0f,//3
-                0.0f,1.0f,//1
-                1.0f,0.0f,//5
-                0.0f, 0.0f,//7
-                
-                1.0f, 0.0f,//7
-                0.0f,0.0f,//6
-
-                0.0f,0.0f,//6
-                1.0f,0.0f,//4
-                0.0f,1.0f,//0
-                1.0f,1.0f,//2
-            };
-
             _textureVbo = GL.GenBuffer();
             GL.BindBuffer(BufferTarget.ArrayBuffer, _textureVbo);
-            GL.BufferData(BufferTarget.ArrayBuffer, sizeof(float) * textureCoordinates.Length, textureCoordinates.ToArray(), BufferUsageHint.StaticDraw);
+            GL.BufferData(BufferTarget.ArrayBuffer, sizeof(float) * textureCoordinates.Length, textureCoordinates, BufferUsageHint.StaticDraw);
             GL.BindBuffer(BufferTarget.ArrayBuffer, 0);
         }
 
@@ -146,7 +96,7 @@ namespace TizenGameEngine.Renderer.RenderableObjects
                 GL.VertexAttribPointer(textureHandle, 2, VertexAttribPointerType.Float, false, 2 * sizeof(float), 0);
                 GL.BindBuffer(BufferTarget.ArrayBuffer, 0);
 
-                GL.DrawArrays(PrimitiveType.TriangleStrip, 0, _vertexesAmount);
+                GL.DrawArrays(PrimitiveType.LineLoop, 0, _vertexesAmount);
             }
             // Disable vertex array
             GL.DisableVertexAttribArray(positionLoc);
@@ -198,6 +148,84 @@ namespace TizenGameEngine.Renderer.RenderableObjects
             GL.DeleteBuffer(_vbo);
             GL.DeleteBuffer(_textureVbo);
             GC.SuppressFinalize(this);
+        }
+
+        private (float[], float[]) _LoadMeshFile()
+        {
+            if (!File.Exists(_path))
+            {
+                throw new FileNotFoundException("Unable to open \"" + _path + "\", does not exist.");
+            }
+
+            var vertices = new List<float>();
+            var textureVertices = new List<float>();
+            List<Vector3> normals = new List<Vector3>();
+            List<uint> vertexIndices = new List<uint>();
+            List<uint> textureIndices = new List<uint>();
+            List<uint> normalIndices = new List<uint>();
+
+            using (StreamReader streamReader = new StreamReader(_path))
+            {
+
+                while (!streamReader.EndOfStream)
+                {
+                    List<string> words = new List<string>(streamReader.ReadLine().ToLower().Split(' '));
+                    words.RemoveAll(s => s == string.Empty);
+
+                    if (words.Count == 0)
+                        continue;
+
+                    string type = words[0];
+                    words.RemoveAt(0);
+
+                    CultureInfo.CurrentCulture = CultureInfo.InvariantCulture;
+
+                    switch (type)
+                    {
+                        // vertex
+                        case "v":
+                            vertices.Add(float.Parse(words[0]));
+                            vertices.Add(float.Parse(words[1]));
+                            vertices.Add(float.Parse(words[2]));
+                            break;
+
+                        case "vt":
+                            textureVertices.Add(float.Parse(words[0]));
+                            textureVertices.Add(float.Parse(words[1]));
+                            //textureVertices.Add(float.Parse(words[2]));
+                            break;
+
+                        case "vn":
+                            normals.Add(new Vector3(float.Parse(words[0]), float.Parse(words[1]), float.Parse(words[2])));
+                            break;
+
+                        // face
+                        case "f":
+                            foreach (string w in words)
+                            {
+                                if (w.Length == 0)
+                                    continue;
+
+                                string[] comps = w.Split('/');
+
+                                // subtract 1: indices start from 1, not 0
+                                vertexIndices.Add(uint.Parse(comps[0]) - 1);
+
+                                if (comps.Length > 1 && comps[1].Length != 0)
+                                    textureIndices.Add(uint.Parse(comps[1]) - 1);
+
+                                if (comps.Length > 2)
+                                    normalIndices.Add(uint.Parse(comps[2]) - 1);
+                            }
+                            break;
+
+                        default:
+                            break;
+                    }
+                }
+            }
+
+            return (vertices.ToArray(), textureVertices.ToArray());
         }
     }
 }

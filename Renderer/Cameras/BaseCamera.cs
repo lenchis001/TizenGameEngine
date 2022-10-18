@@ -1,5 +1,10 @@
-﻿using OpenTK;
+﻿#if TIZEN
+using OpenTK;
 using OpenTK.Input;
+#else
+using OpenTK.Mathematics;
+using OpenTK.Windowing.Common;
+#endif
 using TizenGameEngine.Renderer.Models;
 
 namespace TizenGameEngine.Renderer.Cameras

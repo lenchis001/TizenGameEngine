@@ -1,15 +1,25 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 15
-VisualStudioVersion = 15.0.27428.1
+# Visual Studio Version 17
+VisualStudioVersion = 17.2.32526.322
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TizenGameEngine", "TizenGameEngine\TizenGameEngine.csproj", "{1A3E13E8-5DA0-4959-B2C5-2B84C6D3E3F2}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TizenGameEngine", "TizenGameEngine\TizenGameEngine.csproj", "{1A3E13E8-5DA0-4959-B2C5-2B84C6D3E3F2}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TizenGameEngine.Renderer", "TizenGameEngine.Renderer\TizenGameEngine.Renderer.csproj", "{B59DA66C-9D7D-49E8-9F67-AC016B2D38D5}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TizenGameEngine.Renderer", "TizenGameEngine.Renderer\TizenGameEngine.Renderer.csproj", "{B59DA66C-9D7D-49E8-9F67-AC016B2D38D5}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TizenGameEngine.Logger", "TizenGameEngine.Logger\TizenGameEngine.Logger.csproj", "{177E62E1-E232-49E9-970E-FDD2AEE6BCCA}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TizenGameEngine.Logger", "TizenGameEngine.Logger\TizenGameEngine.Logger.csproj", "{177E62E1-E232-49E9-970E-FDD2AEE6BCCA}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TizenGameEngine.LevelLoader", "TizenGameEngine.LevelLoader\TizenGameEngine.LevelLoader.csproj", "{413FABE1-8930-4DEB-A510-7656EF00024D}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TizenGameEngine.LevelLoader", "TizenGameEngine.LevelLoader\TizenGameEngine.LevelLoader.csproj", "{413FABE1-8930-4DEB-A510-7656EF00024D}"
+EndProject
+Project("{D954291E-2A0B-460D-934E-DC6B0785DB48}") = "Renderer", "Renderer\Renderer.shproj", "{A454EE5A-0A63-4913-9867-3F3B4E73BD4E}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WindowsGameEngine", "WindowsGameEngine\WindowsGameEngine.csproj", "{2B1714D3-3DBD-41DF-89C6-34F952C3D15E}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Tizen", "Tizen", "{FE37FC2D-BBCE-443B-9802-DBDF88B69690}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Windows", "Windows", "{E8BFB177-6C4C-423A-A9D6-9E064859D50B}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WindowsGameEngine.Renderer", "WindowsGameEngine.Renderer\WindowsGameEngine.Renderer.csproj", "{604275FA-8F80-4C65-A080-CB4616CEAE63}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -33,11 +43,30 @@ Global
 		{413FABE1-8930-4DEB-A510-7656EF00024D}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{413FABE1-8930-4DEB-A510-7656EF00024D}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{413FABE1-8930-4DEB-A510-7656EF00024D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{2B1714D3-3DBD-41DF-89C6-34F952C3D15E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{2B1714D3-3DBD-41DF-89C6-34F952C3D15E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{2B1714D3-3DBD-41DF-89C6-34F952C3D15E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{2B1714D3-3DBD-41DF-89C6-34F952C3D15E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{604275FA-8F80-4C65-A080-CB4616CEAE63}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{604275FA-8F80-4C65-A080-CB4616CEAE63}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{604275FA-8F80-4C65-A080-CB4616CEAE63}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{604275FA-8F80-4C65-A080-CB4616CEAE63}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
 	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{1A3E13E8-5DA0-4959-B2C5-2B84C6D3E3F2} = {FE37FC2D-BBCE-443B-9802-DBDF88B69690}
+		{B59DA66C-9D7D-49E8-9F67-AC016B2D38D5} = {FE37FC2D-BBCE-443B-9802-DBDF88B69690}
+		{2B1714D3-3DBD-41DF-89C6-34F952C3D15E} = {E8BFB177-6C4C-423A-A9D6-9E064859D50B}
+		{604275FA-8F80-4C65-A080-CB4616CEAE63} = {E8BFB177-6C4C-423A-A9D6-9E064859D50B}
+	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {F6D6C2B8-2C4D-4C65-A333-E132678AB4CE}
+	EndGlobalSection
+	GlobalSection(SharedMSBuildProjectFiles) = preSolution
+		Renderer\Renderer.projitems*{604275fa-8f80-4c65-a080-cb4616ceae63}*SharedItemsImports = 5
+		Renderer\Renderer.projitems*{a454ee5a-0a63-4913-9867-3f3b4e73bd4e}*SharedItemsImports = 13
+		Renderer\Renderer.projitems*{b59da66c-9d7d-49e8-9f67-ac016b2d38d5}*SharedItemsImports = 5
 	EndGlobalSection
 EndGlobal

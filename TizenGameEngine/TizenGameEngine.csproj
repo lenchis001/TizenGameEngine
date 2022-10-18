@@ -13,9 +13,13 @@
     <DebugType>None</DebugType>
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
   </PropertyGroup>
+  <ItemGroup>
+    <Compile Remove="lib\**" />
+    <EmbeddedResource Remove="lib\**" />
+    <None Remove="lib\**" />
+  </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="lib\" />
     <Folder Include="res\" />
   </ItemGroup>
 

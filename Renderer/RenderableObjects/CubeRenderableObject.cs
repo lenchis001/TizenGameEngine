@@ -1,8 +1,11 @@
 ﻿using System;
 using System.Linq;
+#if TIZEN
 using OpenTK;
+#else
+using OpenTK.Mathematics;
+#endif
 using OpenTK.Graphics.ES20;
-using Tizen.Applications;
 using TizenGameEngine.Renderer.Common;
 using TizenGameEngine.Renderer.Models;
 using TizenGameEngine.Renderer.Services;
@@ -11,7 +14,7 @@ namespace TizenGameEngine.Renderer.RenderableObjects
 {
     public class CubeRenderableObject: IRenderableObject
     {
-        readonly DirectoryInfo _directoryInfo;
+        readonly string _resourcesPath;
         readonly ReferenceContainer<Matrix4> _perspective;
 
         // Handle to a program object
@@ -32,18 +35,18 @@ namespace TizenGameEngine.Renderer.RenderableObjects
         private bool disposedValue;
 
         public CubeRenderableObject(
-            DirectoryInfo directoryInfo,
+            string resourcesPath,
             ReferenceContainer<Matrix4> perspective,
             int shaderProgram)
         {
-            _directoryInfo = directoryInfo;
+            _resourcesPath = resourcesPath;
             _perspective = perspective;
             _shaderProgram = shaderProgram;
         }
 
         public void Load()
         {
-            int textID = TextureHelper.CreateTexture2D(_directoryInfo.Resource + "1.bmp");
+            int textID = TextureHelper.CreateTexture2D(_resourcesPath + "1.bmp");
             GL.ActiveTexture(TextureUnit.Texture0);
             // Bind the texture to this unit.
             GL.BindTexture(TextureTarget.Texture2D, textID);

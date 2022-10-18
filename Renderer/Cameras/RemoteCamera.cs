@@ -1,6 +1,12 @@
 ﻿using System;
+#if TIZEN
 using OpenTK;
 using OpenTK.Input;
+#else
+using OpenTK.Mathematics;
+using OpenTK.Windowing.Common;
+using OpenTK.Windowing.GraphicsLibraryFramework;
+#endif
 using TizenGameEngine.Renderer.Common;
 using TizenGameEngine.Renderer.Models;
 
@@ -20,20 +26,36 @@ namespace TizenGameEngine.Renderer.Cameras
         {
             switch (e.Key)
             {
+#if TIZEN
                 case Key.Left:
+#else
+                case Keys.Left:
+#endif
                     vertical += 0.5f;
                     UpdateView();
                     break;
+#if TIZEN
                 case Key.Right:
+#else
+                case Keys.Right:
+#endif
                     vertical -= 0.5f;
                     UpdateView();
                     break;
 
+#if TIZEN
                 case Key.Up:
+#else
+                case Keys.Up:
+#endif
                     horizontal += 0.1f;
                     UpdateView();
                     break;
+#if TIZEN
                 case Key.Down:
+#else
+                case Keys.Down:
+#endif
                     horizontal -= 0.1f;
                     UpdateView();
                     break;
