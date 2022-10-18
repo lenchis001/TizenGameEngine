@@ -1,11 +1,13 @@
 ﻿using System;
+using System.IO;
 using System.Linq;
+using OpenTK.Graphics.ES20;
 #if TIZEN
 using OpenTK;
 #else
 using OpenTK.Mathematics;
 #endif
-using OpenTK.Graphics.ES20;
+
 using TizenGameEngine.Renderer.Common;
 using TizenGameEngine.Renderer.Models;
 using TizenGameEngine.Renderer.Services;
@@ -46,7 +48,7 @@ namespace TizenGameEngine.Renderer.RenderableObjects
 
         public void Load()
         {
-            int textID = TextureHelper.CreateTexture2D(_resourcesPath + "1.bmp");
+            int textID = TextureHelper.CreateTexture2D(Path.Combine(_resourcesPath, "1.bmp"));
             GL.ActiveTexture(TextureUnit.Texture0);
             // Bind the texture to this unit.
             GL.BindTexture(TextureTarget.Texture2D, textID);

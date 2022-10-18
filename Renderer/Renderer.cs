@@ -48,10 +48,10 @@ namespace TizenGameEngine.Renderer
 
 		public void Load()
         {
-            GL.ClearColor(Color4.Gray);
+            GL.ClearColor(Color4.Black);
             GL.Enable(EnableCap.DepthTest);
 
-			var cube = new CubeRenderableObject(_resourcesPath, _perspective, _shaderService.GetShader(ShaderUsage.CUBE));
+			var cube = new MemoryCubeRenderableObject(_resourcesPath, _perspective, _shaderService.GetShader(ShaderUsage.CUBE));
 			cube.Load();
 			cube.Move(-1, 0, -3);
 			_renderableObjects.Add(cube);

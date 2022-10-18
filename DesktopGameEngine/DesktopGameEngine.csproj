@@ -13,17 +13,13 @@
   <ItemGroup>
     <None Remove="OpenTK" />
     <None Remove="res\" />
-    <None Remove="res\1.bmp" />
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="OpenTK" Version="4.7.5" />
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="res\" />
-  </ItemGroup>
-  <ItemGroup>
-    <Resource Include="res\1.bmp">
+    <None Update="res\1.bmp">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Resource>
+    </None>
   </ItemGroup>
 </Project>

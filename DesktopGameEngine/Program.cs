@@ -23,7 +23,7 @@ namespace BlankWindow
 
         protected override void OnLoad()
         {
-            _renderer = new Renderer(_shaderService, this.ClientSize.X / this.ClientSize.Y, Directory.GetCurrentDirectory());
+            _renderer = new Renderer(_shaderService, this.ClientSize.X / this.ClientSize.Y, Path.Combine(Directory.GetCurrentDirectory(), "res"));
             _renderer.UseCamera();
 
             GL.Viewport(0, 0, this.ClientSize.X, this.ClientSize.Y);
@@ -35,11 +35,11 @@ namespace BlankWindow
 
         protected override void OnRenderFrame(FrameEventArgs args)
         {
+            base.OnRenderFrame(args);
+
             _renderer.RenderFrame();
 
             Context.SwapBuffers();
-
-            base.OnRenderFrame(args);
         }
 
         protected override void OnClosing(CancelEventArgs e)
@@ -52,7 +52,10 @@ namespace BlankWindow
         public static void Main()
         {
             var gws = new GameWindowSettings();
-            var nws = new NativeWindowSettings();
+            var nws = new NativeWindowSettings
+            {
+                Size = new Vector2i { X = 1920, Y = 1080 }
+            };
             var program = new Program(gws, nws);
             program.Run();
         }

@@ -40,9 +40,8 @@ namespace CubeTexture
         {
             base.OnCreate();
 
-            _renderer = new Renderer(DirectoryInfo, Window, _shaderService);
+            _renderer = new Renderer(_shaderService, Window.Width/Window.Height, DirectoryInfo.Resource);
             _renderer.UseCamera();
-            _renderer.SubscribeToEvents();
 
             GL.Viewport(0, 0, Window.Width, Window.Height);
 
