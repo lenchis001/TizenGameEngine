@@ -56,10 +56,10 @@ namespace TizenGameEngine.Renderer
             //cube.Move(-1, 0, -3);
             //_renderableObjects.Add(cube);
 
-            var cube2 = new MemoryCubeRenderableObject(_directoryInfo, _perspective, _shaderService.GetShader(ShaderUsage.CUBE));
-            cube2.Load();
-            cube2.Move(1, 0, -3);
-            _renderableObjects.Add(cube2);
+            //var cube2 = new NObjMeshRenderableObject(_directoryInfo, _perspective, _shaderService.GetShader(ShaderUsage.CUBE));
+            //cube2.Load();
+            //cube2.Move(0, 0, -7);
+            //_renderableObjects.Add(cube2);
 
                 //var mesh = new ObjMeshRenderableObject(_directoryInfo, _perspective, _shaderService.GetShader(ShaderUsage.MESH));
                 //mesh.Load();
@@ -97,13 +97,16 @@ namespace TizenGameEngine.Renderer
             _gameWindow.SwapBuffers();
         }
 
+        float a = 0;
         private void _OnKeyDown(object sender, KeyboardKeyEventArgs e)
         {
-            _activeCamera.OnKeyDown(e);
-            foreach (var obj in _renderableObjects)
-            {
-                obj.RecalculateMatrix();
-            }
+            WebLogger.LogAsync($"On key pressed. Code: {e.ScanCode} {e.Key}");
+            //_activeCamera.OnKeyDown(e);
+            _renderableObjects.First().Rotate(0, a++, 0);
+            //foreach (var obj in _renderableObjects)
+            //{
+            //    obj.RecalculateMatrix();
+            //}
         }
     }
 }

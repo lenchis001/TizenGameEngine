@@ -183,19 +183,6 @@ namespace TizenGameEngine.Renderer.RenderableObjects
                             break;
                     }
                 }
-
-                _vbo = GL.GenBuffer();
-                GL.BindBuffer(BufferTarget.ArrayBuffer, _vbo);
-                GL.BufferData(BufferTarget.ArrayBuffer, sizeof(float) * vertices.Count, vertices.ToArray(), BufferUsageHint.StaticDraw);
-
-                //_vertexArrayObject = GL.GenVertexArray();
-                //GL.BindVertexArray(_vertexArrayObject);
-
-                GL.VertexAttribPointer(0, 3, VertexAttribPointerType.Float, false, 3 * sizeof(float), 0);
-                GL.EnableVertexAttribArray(0);
-
-                GL.BindBuffer(BufferTarget.ArrayBuffer, 0);
-                //GL.BindVertexArray(0);
             }
         }
 
