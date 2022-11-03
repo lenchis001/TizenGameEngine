@@ -21,6 +21,7 @@ namespace TizenGameEngine.Renderer.Cameras
         public abstract void UpdateView();
 
         public abstract void OnKeyDown(KeyboardKeyEventArgs e);
+        public abstract void OnKeyUp(KeyboardKeyEventArgs e);
     }
 }
 

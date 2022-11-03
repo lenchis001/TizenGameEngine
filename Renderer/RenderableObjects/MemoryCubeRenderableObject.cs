@@ -5,7 +5,7 @@ using OpenTK;
 #else
 using OpenTK.Mathematics;
 #endif
-using OpenTK.Graphics.ES20;
+using OpenTK.Graphics.ES30;
 using TizenGameEngine.Renderer.Common;
 using TizenGameEngine.Renderer.Models;
 

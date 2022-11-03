@@ -4,7 +4,7 @@ using OpenTK;
 using OpenTK.Windowing.Desktop;
 using TizenGameEngine.Renderer;
 using TizenGameEngine.Renderer.Services;
-using OpenTK.Graphics.ES20;
+using OpenTK.Graphics.ES30;
 using System.ComponentModel;
 using OpenTK.Windowing.Common;
 using OpenTK.Mathematics;

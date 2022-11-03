@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using OpenTK.Graphics;
-using OpenTK.Graphics.ES20;
+using OpenTK.Graphics.ES30;
 #if TIZEN
 using OpenTK;
 using OpenTK.Input;
@@ -48,24 +48,19 @@ namespace TizenGameEngine.Renderer
 
 		public void Load()
         {
-            GL.ClearColor(Color4.Black);
+            GL.ClearColor(Color4.Gray);
             GL.Enable(EnableCap.DepthTest);
 
-			var cube = new MemoryCubeRenderableObject(_resourcesPath, _perspective, _shaderService.GetShader(ShaderUsage.CUBE));
-			cube.Load();
-			cube.Move(-1, 0, -3);
-			_renderableObjects.Add(cube);
+            //var cube = new MemoryCubeRenderableObject(_resourcesPath, _perspective, _shaderService.GetShader(ShaderUsage.CUBE));
+            //cube.Load();
+            //cube.Move(-1, 0, -3);
+            //_renderableObjects.Add(cube);
 
-			//var cube2 = new NObjMeshRenderableObject(_directoryInfo, _perspective, _shaderService.GetShader(ShaderUsage.CUBE));
-			//cube2.Load();
-			//cube2.Move(0, 0, -7);
-			//_renderableObjects.Add(cube2);
-
-			//var mesh = new ObjMeshRenderableObject(_directoryInfo, _perspective, _shaderService.GetShader(ShaderUsage.MESH));
-			//mesh.Load();
-			//cube2.Move(-1, 0, -3);
-			//_renderableObjects.Add(mesh);
-		}
+            var mesh = new NObjMeshRenderableObject(_resourcesPath, _perspective, _shaderService.GetShader(ShaderUsage.CUBE));
+            mesh.Load();
+            mesh.Move(0, 0, -5);
+            _renderableObjects.Add(mesh);
+        }
 
         public void UseCamera()
         {
@@ -77,19 +72,27 @@ namespace TizenGameEngine.Renderer
         {
             GL.Clear(ClearBufferMask.ColorBufferBit | ClearBufferMask.DepthBufferBit);
 
+            _activeCamera.UpdateView();
+
             foreach (var renderableObject in _renderableObjects)
             {
                 renderableObject.Draw();
             }
         }
 
-        private void _OnKeyDown(object sender, KeyboardKeyEventArgs e)
-        {            
+        public void OnKeyDown(object sender, KeyboardKeyEventArgs e)
+        {
             _activeCamera.OnKeyDown(e);
+
             foreach (var obj in _renderableObjects)
             {
                 obj.RecalculateMatrix();
             }
+        }
+
+        public void OnKeyUp(object sender, KeyboardKeyEventArgs e)
+        {
+            _activeCamera.OnKeyUp(e);
         }
     }
 }

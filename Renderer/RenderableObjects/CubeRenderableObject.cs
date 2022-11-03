@@ -1,7 +1,7 @@
 ﻿using System;
 using System.IO;
 using System.Linq;
-using OpenTK.Graphics.ES20;
+using OpenTK.Graphics.ES30;
 #if TIZEN
 using OpenTK;
 #else

@@ -22,7 +22,6 @@
     <Compile Include="$(MSBuildThisFileDirectory)RenderableObjects\IRenderableObject.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)RenderableObjects\MemoryCubeRenderableObject.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)RenderableObjects\NObjMeshRenderableObject.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)RenderableObjects\ObjMeshRenderableObject.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Renderer.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Services\IShaderService.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Services\ShaderService.cs" />

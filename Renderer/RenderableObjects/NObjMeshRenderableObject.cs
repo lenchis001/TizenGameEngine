@@ -7,7 +7,7 @@ using OpenTK;
 #else
 using OpenTK.Mathematics;
 #endif
-using OpenTK.Graphics.ES20;
+using OpenTK.Graphics.ES30;
 using TizenGameEngine.Renderer.Common;
 using TizenGameEngine.Renderer.Models;
 
@@ -96,7 +96,7 @@ namespace TizenGameEngine.Renderer.RenderableObjects
                 GL.VertexAttribPointer(textureHandle, 2, VertexAttribPointerType.Float, false, 2 * sizeof(float), 0);
                 GL.BindBuffer(BufferTarget.ArrayBuffer, 0);
 
-                GL.DrawArrays(PrimitiveType.LineLoop, 0, _vertexesAmount);
+                GL.DrawArrays(PrimitiveType.TriangleStrip, 0, _vertexesAmount);
             }
             // Disable vertex array
             GL.DisableVertexAttribArray(positionLoc);

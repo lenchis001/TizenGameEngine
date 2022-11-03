@@ -15,7 +15,7 @@
  *
  */
 using OpenTK;
-using OpenTK.Graphics.ES20;
+using OpenTK.Graphics.ES30;
 using OpenTK.Input;
 using OpenTK.Platform.Tizen;
 using System;
@@ -42,11 +42,24 @@ namespace CubeTexture
 
             _renderer = new Renderer(_shaderService, (float)Window.Width/Window.Height, DirectoryInfo.Resource);
             _renderer.UseCamera();
+
             Window.RenderFrame += _OnRenderFrame;
+            Window.KeyDown += _OnKeyDown;
+            Window.KeyUp += _OnKeyUp;
 
             GL.Viewport(0, 0, Window.Width, Window.Height);
 
             _renderer.Load();
+        }
+
+        private void _OnKeyUp(object sender, KeyboardKeyEventArgs e)
+        {
+            _renderer.OnKeyUp(sender, e);
+        }
+
+        private void _OnKeyDown(object sender, KeyboardKeyEventArgs e)
+        {
+            _renderer.OnKeyDown(sender, e);
         }
 
         private void _OnRenderFrame(object sender, FrameEventArgs e)
@@ -65,6 +78,8 @@ namespace CubeTexture
         protected override void OnTerminate()
         {
             Window.RenderFrame -= _OnRenderFrame;
+            Window.KeyDown -= _OnKeyDown;
+            Window.KeyUp -= _OnKeyUp;
             _shaderService.Dispose();
 
             base.OnTerminate();

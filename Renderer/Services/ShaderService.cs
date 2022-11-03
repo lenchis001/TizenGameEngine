@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using OpenTK.Graphics.ES20;
+using OpenTK.Graphics.ES30;
 using TizenGameEngine.Renderer.Models;
 
 namespace TizenGameEngine.Renderer.Services
@@ -40,23 +40,23 @@ namespace TizenGameEngine.Renderer.Services
                 ShaderUsage.MESH,
                 new ShaderDescriptor{
                     VertexShaderSource =
-                          "# version 320 es\n" +
-                          "uniform mat4 u_mvpMatrix;\n" +
-                          "in vec3 aPosition;\n" +
-                          "\n" +
-                          "void main()\n" +
-                          "{\n" +
-                                "gl_Position = vec4(aPosition, 1.0) * u_mvpMatrix;\n" +
-                          "}",
+                          "uniform mat4 u_mvpMatrix;              \n" +
+                          "attribute vec2 aTexture;                      \n" +
+                          "attribute vec4 a_position;                  \n" +
+                          "varying vec2 vtexture;\n" +
+                          "void main()                                 \n" +
+                          "{                                           \n" +
+                          "   vtexture = aTexture;  \n" +
+                          "   gl_Position = u_mvpMatrix * a_position;  \n" +
+                          "}                                           \n",
                     FragmentShader =
-                          "# version 320 es\n" +
                           "precision mediump float;  \n" +
-                          "out vec4 FragColor;\n" +
-                          "\n"+
-                          "void main()\n" +
-                          "{\n" +
-                                "FragColor = vec4(1.0f, 0.5f, 0.2f, 0.5f);\n" +
-                          "}",
+                          "uniform sampler2D uTexMap;\n" +
+                          "varying vec2 vtexture;\n" +
+                          "void main()    \n" +
+                          "{             \n" +
+                          "  gl_FragColor = texture2D(uTexMap, vtexture); \n" +
+                          "}\n",
                     Arguments = Enumerable.Empty<string>().ToArray()
                 }
             }
