@@ -8,12 +8,13 @@
     <None Remove="Models\" />
     <None Remove="Newtonsoft.Json" />
     <None Remove="Models\Level\" />
+    <None Remove="System.Text.Json" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Models\" />
     <Folder Include="Models\Serialization\" />
   </ItemGroup>
   <ItemGroup>
-    <PackageReference Include="Newtonsoft.Json" Version="13.0.1" />
+    <PackageReference Include="Newtonsoft.Json" Version="11.0.1" />
   </ItemGroup>
 </Project>

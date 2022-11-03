@@ -1,4 +1,5 @@
 ﻿using System;
+using System.IO;
 using System.Linq;
 using Newtonsoft.Json;
 using SerializationModels = TizenGameEngine.LevelLoader.Models.Serialization;
@@ -16,7 +17,14 @@ namespace TizenGameEngine.LevelLoader.Models
 
         public Level LoadFile(string path)
         {
-            throw new NotImplementedException();
+            string result;
+
+            using (StreamReader streamReader = new StreamReader(path))
+            {
+                result = streamReader.ReadToEnd();
+            }
+
+            return LoadContent(result);
         }
 
         private Object ToObject(SerializationModels.ObjectItem objectItem)
@@ -43,11 +51,12 @@ namespace TizenGameEngine.LevelLoader.Models
         {
             return new ObjMesh
             {
+                Type = ObjectType.OBJ_MESH,
                 Position = ToVector(objectItem.Position),
                 Rotation = ToVector(objectItem.Rotation),
                 Scale = ToVector(objectItem.Scale),
                 GeometryPath = objectItem.GeometryPath,
-                MtlPath = objectItem.MtlPath,
+                Textures = objectItem.Textures,
                 Children = objectItem.Children.Select(e => ToObject(e)).ToArray()
             };
         }

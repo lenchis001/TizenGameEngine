@@ -47,14 +47,14 @@ namespace TizenGameEngine.Renderer.Cameras
 #else
                 case Keys.Up:
 #endif
-                    _moveMode = _MoveMode.UP;
+                    _moveMode = _MoveMode.FORWARD;
                     break;
 #if TIZEN
                 case Key.Down:
 #else
                 case Keys.Down:
 #endif
-                    _moveMode = _MoveMode.DOWN;
+                    _moveMode = _MoveMode.BACKWARD;
                     break;
 #if TIZEN
                 case Key.Plus:
@@ -90,6 +90,7 @@ namespace TizenGameEngine.Renderer.Cameras
             MatrixState.EsMatrixLoadIdentity(ref _perspective.Value);
             MatrixState.EsPerspective(ref _perspective.Value, 40.0f, _ratio, 1.0f, 20.0f);
             MatrixState.EsRotate(ref _perspective.Value, vertical, 0, 1, 0);
+            MatrixState.EsRotate(ref _perspective.Value, -6F, 1, 0, 0);
             MatrixState.EsTranslate(ref _perspective.Value, 0, 0, horizontal);
         }
 
@@ -103,10 +104,10 @@ namespace TizenGameEngine.Renderer.Cameras
                 case _MoveMode.RIGHT:
                     vertical += 0.1F;
                     break;
-                case _MoveMode.DOWN:
+                case _MoveMode.BACKWARD:
                     horizontal -= 0.01F;
                     break;
-                case _MoveMode.UP:
+                case _MoveMode.FORWARD:
                     horizontal += 0.01F;
                     break;
             }

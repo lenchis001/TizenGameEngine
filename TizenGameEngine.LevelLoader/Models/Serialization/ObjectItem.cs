@@ -26,14 +26,14 @@ namespace TizenGameEngine.LevelLoader.Models.Serialization
         [DataMember(Name = "rotation")]
         public Vector Rotation { get; set; }
 
-        [DataMember(Name = "position")]
+        [DataMember(Name = "scale")]
         public Vector Scale { get; set; }
 
         [DataMember(Name = "geometryPath")]
         public string GeometryPath { get; set; }
 
-        [DataMember(Name = "mtlPath")]
-        public string MtlPath { get; set; }
+        [DataMember(Name = "textures")]
+        public ICollection<string> Textures { get; set; }
         #endregion
     }
 }

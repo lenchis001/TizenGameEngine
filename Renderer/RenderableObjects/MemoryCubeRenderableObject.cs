@@ -138,7 +138,6 @@ namespace TizenGameEngine.Renderer.RenderableObjects
                 // Prepare the triangle coordinate data
                 GL.BindBuffer(BufferTarget.ArrayBuffer, _vbo);
                 GL.VertexAttribPointer(positionLoc, 3, VertexAttribPointerType.Float, false, 3 * sizeof(float), 0);
-                GL.BindBuffer(BufferTarget.ArrayBuffer, 0);
 
                 _mvpLoc = GL.GetUniformLocation(_shaderProgram, "u_mvpMatrix");
                 GL.UniformMatrix4(_mvpLoc, false, ref _mvpMatrix);
@@ -148,7 +147,7 @@ namespace TizenGameEngine.Renderer.RenderableObjects
                 GL.VertexAttribPointer(textureHandle, 2, VertexAttribPointerType.Float, false, 2 * sizeof(float), 0);
                 GL.BindBuffer(BufferTarget.ArrayBuffer, 0);
 
-                GL.DrawArrays(PrimitiveType.TriangleStrip, 0, _vertexesAmount);
+                GL.DrawArrays(PrimitiveType.TriangleStrip, 0, _vertexesAmount/3);
             }
             // Disable vertex array
             GL.DisableVertexAttribArray(positionLoc);

@@ -1,12 +1,12 @@
 ﻿using System;
+using System.Collections.Generic;
+
 namespace TizenGameEngine.LevelLoader.Models
 {
     public class ObjMesh: Object
     {
-        public new ObjectType Type => ObjectType.OBJ_MESH;
-
         public string GeometryPath { get; set; }
-        public string MtlPath { get; set; }
+        public ICollection<string> Textures { get; set; }
 
         public Vector Position { get; set; }
         public Vector Rotation { get; set; }

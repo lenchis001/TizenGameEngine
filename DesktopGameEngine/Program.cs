@@ -8,6 +8,7 @@ using OpenTK.Graphics.ES30;
 using System.ComponentModel;
 using OpenTK.Windowing.Common;
 using OpenTK.Mathematics;
+using TizenGameEngine.LevelLoader.Models;
 
 namespace BlankWindow
 {
@@ -23,7 +24,7 @@ namespace BlankWindow
 
         protected override void OnLoad()
         {
-            _renderer = new Renderer(_shaderService, this.ClientSize.X / this.ClientSize.Y, Path.Combine(Directory.GetCurrentDirectory(), "res"));
+            _renderer = new Renderer(_shaderService, new TlfLoader(), this.ClientSize.X / this.ClientSize.Y, Path.Combine(Directory.GetCurrentDirectory(), "res"));
             _renderer.UseCamera();
 
             GL.Viewport(0, 0, this.ClientSize.X, this.ClientSize.Y);

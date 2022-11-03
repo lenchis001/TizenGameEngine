@@ -15,7 +15,7 @@ namespace TizenGameEngine.Renderer.RenderableObjects
 {
     public class NObjMeshRenderableObject : IRenderableObject
     {
-        readonly string _resourcesPath;
+        readonly string _modelPath, _texturePath;
         readonly ReferenceContainer<Matrix4> _perspective;
 
         int _vbo, _textureVbo, _vertexesAmount;
@@ -28,23 +28,21 @@ namespace TizenGameEngine.Renderer.RenderableObjects
 
         private Vector3 _position, _rotation, _scale;
 
-        private string _path;
-
         // MVP matrix
         Matrix4 _mvpMatrix;
         Matrix4 _modelview;
         private bool disposedValue;
 
         public NObjMeshRenderableObject(
-            string resourcesPath,
+            string modelPath,
+            string texturePath,
             ReferenceContainer<Matrix4> perspective,
             int shaderProgram)
         {
-            _resourcesPath = resourcesPath;
+            _modelPath = modelPath;
+            _texturePath = texturePath;
             _perspective = perspective;
             _shaderProgram = shaderProgram;
-
-            _path = resourcesPath + "car.obj";
         }
 
         public void Load()
@@ -60,7 +58,7 @@ namespace TizenGameEngine.Renderer.RenderableObjects
 
             // -------------------------
 
-            int textID = TextureHelper.CreateTexture2D(_resourcesPath + "1.bmp");
+            int textID = TextureHelper.CreateTexture2D(_texturePath);
             GL.ActiveTexture(TextureUnit.Texture0);
             // Bind the texture to this unit.
             GL.BindTexture(TextureTarget.Texture2D, textID);
@@ -86,7 +84,6 @@ namespace TizenGameEngine.Renderer.RenderableObjects
                 // Prepare the triangle coordinate data
                 GL.BindBuffer(BufferTarget.ArrayBuffer, _vbo);
                 GL.VertexAttribPointer(positionLoc, 3, VertexAttribPointerType.Float, false, 3 * sizeof(float), 0);
-                GL.BindBuffer(BufferTarget.ArrayBuffer, 0);
 
                 _mvpLoc = GL.GetUniformLocation(_shaderProgram, "u_mvpMatrix");
                 GL.UniformMatrix4(_mvpLoc, false, ref _mvpMatrix);
@@ -96,7 +93,7 @@ namespace TizenGameEngine.Renderer.RenderableObjects
                 GL.VertexAttribPointer(textureHandle, 2, VertexAttribPointerType.Float, false, 2 * sizeof(float), 0);
                 GL.BindBuffer(BufferTarget.ArrayBuffer, 0);
 
-                GL.DrawArrays(PrimitiveType.TriangleStrip, 0, _vertexesAmount);
+                GL.DrawArrays(PrimitiveType.TriangleStrip, 0, _vertexesAmount/3);
             }
             // Disable vertex array
             GL.DisableVertexAttribArray(positionLoc);
@@ -152,9 +149,11 @@ namespace TizenGameEngine.Renderer.RenderableObjects
 
         private (float[], float[]) _LoadMeshFile()
         {
-            if (!File.Exists(_path))
+            var modelPath = _modelPath;
+
+            if (!File.Exists(modelPath))
             {
-                throw new FileNotFoundException("Unable to open \"" + _path + "\", does not exist.");
+                throw new FileNotFoundException("Unable to open \"" + modelPath + "\", does not exist.");
             }
 
             var vertices = new List<float>();
@@ -164,7 +163,7 @@ namespace TizenGameEngine.Renderer.RenderableObjects
             List<uint> textureIndices = new List<uint>();
             List<uint> normalIndices = new List<uint>();
 
-            using (StreamReader streamReader = new StreamReader(_path))
+            using (StreamReader streamReader = new StreamReader(modelPath))
             {
 
                 while (!streamReader.EndOfStream)

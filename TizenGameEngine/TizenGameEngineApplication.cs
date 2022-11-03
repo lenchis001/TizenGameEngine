@@ -20,6 +20,7 @@ using OpenTK.Input;
 using OpenTK.Platform.Tizen;
 using System;
 using System.Threading.Tasks;
+using TizenGameEngine.LevelLoader.Models;
 using TizenGameEngine.Logger;
 using TizenGameEngine.Renderer;
 using TizenGameEngine.Renderer.Services;
@@ -40,7 +41,7 @@ namespace CubeTexture
         {
             base.OnCreate();
 
-            _renderer = new Renderer(_shaderService, (float)Window.Width/Window.Height, DirectoryInfo.Resource);
+            _renderer = new Renderer(_shaderService, new TlfLoader(), (float)Window.Width/Window.Height, DirectoryInfo.Resource);
             _renderer.UseCamera();
 
             Window.RenderFrame += _OnRenderFrame;

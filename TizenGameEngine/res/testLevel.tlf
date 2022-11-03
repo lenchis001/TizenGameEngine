@@ -1,0 +1,102 @@
+{
+    "name": "Test level",
+    "type": "level",
+    "children": [
+        {
+            "type": "obj_mesh",
+            "name": "monkey",
+            "position": {
+                "x": -2,
+                "y": 0,
+                "z": -15
+            },
+            "rotation": {
+                "x": 0,
+                "y": 0,
+                "z": 0
+            },
+            "scale": {
+                "x": 0,
+                "y": 0,
+                "z": 0
+            },
+            "geometryPath": "road.obj",
+            "textures": [
+                "road.bmp"
+            ],
+            "children": []
+        },
+        {
+            "type": "obj_mesh",
+            "name": "monkey",
+            "position": {
+                "x": 2,
+                "y": 0,
+                "z": -15
+            },
+            "rotation": {
+                "x": 0,
+                "y": 0,
+                "z": 0
+            },
+            "scale": {
+                "x": 0,
+                "y": 0,
+                "z": 0
+            },
+            "geometryPath": "road.obj",
+            "textures": [
+                "road.bmp"
+            ],
+            "children": []
+        },
+        {
+            "type": "obj_mesh",
+            "name": "monkey",
+            "position": {
+                "x": 2,
+                "y": -3,
+                "z": -15
+            },
+            "rotation": {
+                "x": 0,
+                "y": 0,
+                "z": 0
+            },
+            "scale": {
+                "x": 0,
+                "y": 0,
+                "z": 0
+            },
+            "geometryPath": "road.obj",
+            "textures": [
+                "road.bmp"
+            ],
+            "children": []
+        },
+        {
+            "type": "obj_mesh",
+            "name": "monkey",
+            "position": {
+                "x": -2,
+                "y": 2,
+                "z": -15
+            },
+            "rotation": {
+                "x": 0,
+                "y": 0,
+                "z": 0
+            },
+            "scale": {
+                "x": 0,
+                "y": 0,
+                "z": 0
+            },
+            "geometryPath": "road.obj",
+            "textures": [
+                "road.bmp"
+            ],
+            "children": []
+        }
+    ]
+}

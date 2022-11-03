@@ -29,6 +29,7 @@
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\TizenGameEngine.Logger\TizenGameEngine.Logger.csproj" />
+    <ProjectReference Include="..\TizenGameEngine.LevelLoader\TizenGameEngine.LevelLoader.csproj" />
   </ItemGroup>
   <Import Project="..\Renderer\Renderer.projitems" Label="Shared" />
 </Project>

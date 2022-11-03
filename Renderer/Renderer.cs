@@ -14,6 +14,8 @@ using TizenGameEngine.Renderer.Cameras;
 using TizenGameEngine.Renderer.Models;
 using TizenGameEngine.Renderer.RenderableObjects;
 using TizenGameEngine.Renderer.Services;
+using TizenGameEngine.LevelLoader;
+using TizenGameEngine.LevelLoader.Models;
 
 namespace TizenGameEngine.Renderer
 {
@@ -22,6 +24,7 @@ namespace TizenGameEngine.Renderer
         private readonly ICollection<IRenderableObject> _renderableObjects;
 
         private readonly IShaderService _shaderService;
+        private readonly ILevelLoader _levelLoader;
 
         private readonly ReferenceContainer<Matrix4> _perspective;
 
@@ -34,11 +37,12 @@ namespace TizenGameEngine.Renderer
         // Rotation angle
         private float angleX = 45.0f;
 
-        public Renderer(IShaderService shaderService, float aspectRatio, string resourcesPath)
+        public Renderer(IShaderService shaderService, ILevelLoader levelLoader, float aspectRatio, string resourcesPath)
 		{
 			_renderableObjects = new List<IRenderableObject>();
 
 			_shaderService = shaderService;
+            _levelLoader = levelLoader;
 
 			_perspective = new ReferenceContainer<Matrix4>();
 
@@ -51,15 +55,7 @@ namespace TizenGameEngine.Renderer
             GL.ClearColor(Color4.Gray);
             GL.Enable(EnableCap.DepthTest);
 
-            //var cube = new MemoryCubeRenderableObject(_resourcesPath, _perspective, _shaderService.GetShader(ShaderUsage.CUBE));
-            //cube.Load();
-            //cube.Move(-1, 0, -3);
-            //_renderableObjects.Add(cube);
-
-            var mesh = new NObjMeshRenderableObject(_resourcesPath, _perspective, _shaderService.GetShader(ShaderUsage.CUBE));
-            mesh.Load();
-            mesh.Move(0, 0, -5);
-            _renderableObjects.Add(mesh);
+            LoadLevel(_resourcesPath + "testLevel.tlf");
         }
 
         public void UseCamera()
@@ -68,6 +64,7 @@ namespace TizenGameEngine.Renderer
             _activeCamera.UpdateView();
         }
 
+        float a = 0;
         public void RenderFrame()
         {
             GL.Clear(ClearBufferMask.ColorBufferBit | ClearBufferMask.DepthBufferBit);
@@ -76,6 +73,7 @@ namespace TizenGameEngine.Renderer
 
             foreach (var renderableObject in _renderableObjects)
             {
+                renderableObject.Rotate(a += 0.5F, 0, 0);
                 renderableObject.Draw();
             }
         }
@@ -93,6 +91,32 @@ namespace TizenGameEngine.Renderer
         public void OnKeyUp(object sender, KeyboardKeyEventArgs e)
         {
             _activeCamera.OnKeyUp(e);
+        }
+
+        private void LoadLevel(string path)
+        {
+            var level = _levelLoader.LoadFile(path);
+
+            LoadChildren(level.Children);
+        }
+
+        private void LoadChildren(ICollection<LevelLoader.Models.Object> objects)
+        {
+            foreach (var item in objects)
+            {
+                switch (item.Type)
+                {
+                    case LevelLoader.Models.ObjectType.OBJ_MESH:
+                        var castedModel = (ObjMesh)item;
+
+                        var mesh = new NObjMeshRenderableObject(_resourcesPath + castedModel.GeometryPath, _resourcesPath + castedModel.Textures.First(), _perspective, _shaderService.GetShader(ShaderUsage.CUBE));
+                        mesh.Load();
+                        mesh.Move(castedModel.Position.X, castedModel.Position.Y, castedModel.Position.Z);
+                        _renderableObjects.Add(mesh);
+                        break;
+
+                }
+            }
         }
     }
 }
