@@ -29,7 +29,7 @@ namespace CubeTexture
 {
     class TizenGameEngineApplication : TizenGameApplication
     {
-        private Renderer _renderer;
+        private ContentRenderer _renderer;
         private readonly IShaderService _shaderService;
 
         public TizenGameEngineApplication()
@@ -41,7 +41,7 @@ namespace CubeTexture
         {
             base.OnCreate();
 
-            _renderer = new Renderer(_shaderService, new TlfLoader(), (float)Window.Width/Window.Height, DirectoryInfo.Resource);
+            _renderer = new ContentRenderer(_shaderService, new TlfLoader(), (float)Window.Width/Window.Height, DirectoryInfo.Resource);
             _renderer.UseCamera();
 
             Window.RenderFrame += _OnRenderFrame;

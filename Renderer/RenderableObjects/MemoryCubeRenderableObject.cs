@@ -49,6 +49,7 @@ namespace TizenGameEngine.Renderer.RenderableObjects
                 0.5f, 0.5f,  0.5f,//1
                 -0.5f, 0.5f,  -0.5f,//2
                 0.5f, 0.5f, -0.5f,//3
+
                 -0.5f,  -0.5f, -0.5f,//4
                 0.5f,  -0.5f,  -0.5f,//5
                 -0.5f, -0.5f, 0.5f,//6
@@ -63,12 +64,12 @@ namespace TizenGameEngine.Renderer.RenderableObjects
                 0.5f, 0.5f,  0.5f,//1
                 0.5f,  -0.5f,  -0.5f,//5
                 0.5f,  -0.5f,  0.5f,//7
-                
+
                 0.5f,  -0.5f,  0.5f,//7
                 -0.5f, -0.5f, 0.5f,//6
-
                 -0.5f, -0.5f, 0.5f,//6
                 -0.5f,  -0.5f, -0.5f,//4
+
                 -0.5f, 0.5f, 0.5f,//0
                 -0.5f, 0.5f,  -0.5f,//2
             };
@@ -78,11 +79,10 @@ namespace TizenGameEngine.Renderer.RenderableObjects
             _vbo = GL.GenBuffer();
             GL.BindBuffer(BufferTarget.ArrayBuffer, _vbo);
             GL.BufferData(BufferTarget.ArrayBuffer, sizeof(float) * vertices.Length, vertices.ToArray(), BufferUsageHint.StaticDraw);
-            GL.BindBuffer(BufferTarget.ArrayBuffer, 0);
 
             // -------------------------
 
-            int textID = TextureHelper.CreateTexture2D(_resourcesPath + "1.bmp");
+            int textID = TextureHelper.CreateTexture2D(_resourcesPath + "road.bmp");
             GL.ActiveTexture(TextureUnit.Texture0);
             // Bind the texture to this unit.
             GL.BindTexture(TextureTarget.Texture2D, textID);

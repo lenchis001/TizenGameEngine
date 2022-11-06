@@ -25,5 +25,8 @@
     <Compile Include="$(MSBuildThisFileDirectory)Renderer.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Services\IShaderService.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Services\ShaderService.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)MeshLoaders\ObjMeshLoader.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)MeshLoaders\IMeshLoader.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Models\Mesh\Face.cs" />
   </ItemGroup>
 </Project>

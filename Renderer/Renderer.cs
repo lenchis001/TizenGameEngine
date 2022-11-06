@@ -19,7 +19,7 @@ using TizenGameEngine.LevelLoader.Models;
 
 namespace TizenGameEngine.Renderer
 {
-    public class Renderer
+    public class ContentRenderer
     {
         private readonly ICollection<IRenderableObject> _renderableObjects;
 
@@ -37,7 +37,7 @@ namespace TizenGameEngine.Renderer
         // Rotation angle
         private float angleX = 45.0f;
 
-        public Renderer(IShaderService shaderService, ILevelLoader levelLoader, float aspectRatio, string resourcesPath)
+        public ContentRenderer(IShaderService shaderService, ILevelLoader levelLoader, float aspectRatio, string resourcesPath)
 		{
 			_renderableObjects = new List<IRenderableObject>();
 
@@ -109,6 +109,7 @@ namespace TizenGameEngine.Renderer
                     case LevelLoader.Models.ObjectType.OBJ_MESH:
                         var castedModel = (ObjMesh)item;
 
+                        //var mesh = new MemoryCubeRenderableObject(_resourcesPath, _perspective, _shaderService.GetShader(ShaderUsage.CUBE));// NObjMeshRenderableObject(_resourcesPath + castedModel.GeometryPath, _resourcesPath + castedModel.Textures.First(), _perspective, _shaderService.GetShader(ShaderUsage.CUBE));
                         var mesh = new NObjMeshRenderableObject(_resourcesPath + castedModel.GeometryPath, _resourcesPath + castedModel.Textures.First(), _perspective, _shaderService.GetShader(ShaderUsage.CUBE));
                         mesh.Load();
                         mesh.Move(castedModel.Position.X, castedModel.Position.Y, castedModel.Position.Z);
