@@ -3,16 +3,15 @@ using System.Collections.Generic;
 using System.Globalization;
 using System.IO;
 using OpenTK;
-#if TIZEN
-using OpenTK;
-#else
+#if !TIZEN
 using OpenTK.Mathematics;
 #endif
 using Renderer.Models.Mesh;
+using TizenGameEngine.Renderer.Services.MeshLoading;
 
 namespace Renderer.MeshLoaders
 {
-    public class ObjMeshLoader : IMeshLoader
+    public class ObjMeshLoadingService : IMeshLoadingService
     {
         public ICollection<Face> Load(string path)
         {

@@ -2,16 +2,14 @@
 using System.Collections.Generic;
 using System.Linq;
 using OpenTK;
-#if TIZEN
-using OpenTK;
-#else
+#if !TIZEN
 using OpenTK.Mathematics;
 #endif
 using Renderer.Models.Mesh;
 
-namespace Renderer.MeshLoaders
+namespace TizenGameEngine.Renderer.Services.MeshLoading
 {
-    public interface IMeshLoader
+    public interface IMeshLoadingService
     {
         ICollection<Face> Load(string path);
     }

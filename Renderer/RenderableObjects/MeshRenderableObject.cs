@@ -12,12 +12,14 @@ using OpenTK.Graphics.ES30;
 using TizenGameEngine.Renderer.Common;
 using TizenGameEngine.Renderer.Models;
 using Renderer.MeshLoaders;
+using TizenGameEngine.Renderer.Services.MeshLoading;
 
 namespace TizenGameEngine.Renderer.RenderableObjects
 {
-    public class NObjMeshRenderableObject : IRenderableObject
+    public class MeshRenderableObject : IRenderableObject
     {
-        readonly string _modelPath, _texturePath;
+        private readonly string _modelPath;
+        private readonly ICollection<string> _texturePath;
         readonly ReferenceContainer<Matrix4> _perspective;
 
         int _vbo, _textureVbo, _vertexesAmount;
@@ -35,9 +37,9 @@ namespace TizenGameEngine.Renderer.RenderableObjects
         Matrix4 _modelview;
         private bool disposedValue;
 
-        public NObjMeshRenderableObject(
+        public MeshRenderableObject(
             string modelPath,
-            string texturePath,
+            ICollection<string> texturePath,
             ReferenceContainer<Matrix4> perspective,
             int shaderProgram)
         {
@@ -49,7 +51,7 @@ namespace TizenGameEngine.Renderer.RenderableObjects
 
         public void Load()
         {
-            var meshLoader = new ObjMeshLoader();
+            var meshLoader = new ObjMeshLoadingService();
             var faces = meshLoader.Load(_modelPath);
 
             var vertices = faces.ToVertexes().ToIndices().ToArray();
@@ -63,7 +65,7 @@ namespace TizenGameEngine.Renderer.RenderableObjects
 
             // -------------------------
 
-            int textID = TextureHelper.CreateTexture2D(_texturePath);
+            int textID = TextureHelper.CreateTexture2D(_texturePath.First());
             GL.ActiveTexture(TextureUnit.Texture0);
             // Bind the texture to this unit.
             GL.BindTexture(TextureTarget.Texture2D, textID);

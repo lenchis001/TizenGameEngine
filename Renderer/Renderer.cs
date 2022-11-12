@@ -34,23 +34,20 @@ namespace TizenGameEngine.Renderer
 
         private BaseCamera _activeCamera;
 
-        // Rotation angle
-        private float angleX = 45.0f;
-
         public ContentRenderer(IShaderService shaderService, ILevelLoader levelLoader, float aspectRatio, string resourcesPath)
-		{
-			_renderableObjects = new List<IRenderableObject>();
+        {
+            _renderableObjects = new List<IRenderableObject>();
 
-			_shaderService = shaderService;
+            _shaderService = shaderService;
             _levelLoader = levelLoader;
 
-			_perspective = new ReferenceContainer<Matrix4>();
+            _perspective = new ReferenceContainer<Matrix4>();
 
-			_ratio = aspectRatio;
-			_resourcesPath = resourcesPath;
-		}
+            _ratio = aspectRatio;
+            _resourcesPath = resourcesPath;
+        }
 
-		public void Load()
+        public void Load()
         {
             GL.ClearColor(Color4.Gray);
             GL.Enable(EnableCap.DepthTest);
@@ -74,6 +71,7 @@ namespace TizenGameEngine.Renderer
             foreach (var renderableObject in _renderableObjects)
             {
                 renderableObject.Rotate(a += 0.5F, 0, 0);
+                renderableObject.RecalculateMatrix();
                 renderableObject.Draw();
             }
         }
@@ -81,11 +79,6 @@ namespace TizenGameEngine.Renderer
         public void OnKeyDown(object sender, KeyboardKeyEventArgs e)
         {
             _activeCamera.OnKeyDown(e);
-
-            foreach (var obj in _renderableObjects)
-            {
-                obj.RecalculateMatrix();
-            }
         }
 
         public void OnKeyUp(object sender, KeyboardKeyEventArgs e)
@@ -109,8 +102,13 @@ namespace TizenGameEngine.Renderer
                     case LevelLoader.Models.ObjectType.OBJ_MESH:
                         var castedModel = (ObjMesh)item;
 
-                        //var mesh = new MemoryCubeRenderableObject(_resourcesPath, _perspective, _shaderService.GetShader(ShaderUsage.CUBE));// NObjMeshRenderableObject(_resourcesPath + castedModel.GeometryPath, _resourcesPath + castedModel.Textures.First(), _perspective, _shaderService.GetShader(ShaderUsage.CUBE));
-                        var mesh = new NObjMeshRenderableObject(_resourcesPath + castedModel.GeometryPath, _resourcesPath + castedModel.Textures.First(), _perspective, _shaderService.GetShader(ShaderUsage.CUBE));
+                        var mesh = new MeshRenderableObject(
+                            _resourcesPath + castedModel.GeometryPath,
+                            castedModel.Textures.Select(p => _resourcesPath + p).ToArray(),
+                            _perspective,
+                            _shaderService.GetShader(ShaderUsage.CUBE)
+                        );
+
                         mesh.Load();
                         mesh.Move(castedModel.Position.X, castedModel.Position.Y, castedModel.Position.Z);
                         _renderableObjects.Add(mesh);

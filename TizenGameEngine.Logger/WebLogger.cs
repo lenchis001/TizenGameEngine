@@ -13,11 +13,11 @@ namespace TizenGameEngine.Logger
             {
                 var client = new HttpClient();
 
-                var content = new StringContent($"{{ \"message\":\"{Convert.ToBase64String(Encoding.UTF8.GetBytes(message))}\" }}");
+                var content = new StringContent($"{{ \"message\":\"{message}\" }}");
                 content.Headers.ContentType = new System.Net.Http.Headers.MediaTypeHeaderValue("application/json");
 
 
-                client.PostAsync("http://93.84.105.94:4004/log", content).Wait();
+                client.PostAsync("http://93.84.105.94:4004/log", content);
             }
             catch (Exception)
             {

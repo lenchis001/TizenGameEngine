@@ -18,13 +18,13 @@ namespace BlankWindow
 {
     sealed class Program : OpenTK.Windowing.Desktop.GameWindow
     {
+        private ContentRenderer _renderer;
+        private readonly IShaderService _shaderService;
+
         public Program(GameWindowSettings gameWindowSettings, NativeWindowSettings nativeWindowSettings) : base(gameWindowSettings, nativeWindowSettings)
         {
             _shaderService = new ShaderService();
         }
-
-        private ContentRenderer _renderer;
-        private readonly IShaderService _shaderService;
 
         protected override void OnLoad()
         {

@@ -14,13 +14,17 @@ namespace TizenGameEngine.Renderer.Cameras
 {
     public class RemoteCamera: BaseCamera
     {
-        float vertical = 0;
-        float horizontal = 0;
+        float _leftRight = 0;
+        float _forwardBackward = -25;
         float _ratio;
         _MoveMode _moveMode;
 
         public RemoteCamera(ReferenceContainer<Matrix4> perspective, float ratio) : base(perspective) {
             _ratio = ratio;
+
+            _moveMode = _MoveMode.NO_MOVE;
+
+            RecalculateMatrix();
         }
 
         public override void OnKeyDown(KeyboardKeyEventArgs e)
@@ -75,6 +79,13 @@ namespace TizenGameEngine.Renderer.Cameras
 
         public override void OnKeyUp(KeyboardKeyEventArgs e)
         {
+#if TIZEN
+            if (e.Keyboard.IsKeyDown(Key.Up))
+            {
+                return;
+            }
+#endif
+
             _moveMode = _MoveMode.NO_MOVE;
         }
 
@@ -87,11 +98,7 @@ namespace TizenGameEngine.Renderer.Cameras
 
             UpdateNavigation();
 
-            MatrixState.EsMatrixLoadIdentity(ref _perspective.Value);
-            MatrixState.EsPerspective(ref _perspective.Value, 40.0f, _ratio, 1.0f, 20.0f);
-            MatrixState.EsRotate(ref _perspective.Value, vertical, 0, 1, 0);
-            MatrixState.EsRotate(ref _perspective.Value, -6F, 1, 0, 0);
-            MatrixState.EsTranslate(ref _perspective.Value, 0, 0, horizontal);
+            RecalculateMatrix();
         }
 
         private void UpdateNavigation()
@@ -99,18 +106,27 @@ namespace TizenGameEngine.Renderer.Cameras
             switch (_moveMode)
             {
                 case _MoveMode.LEFT:
-                    vertical -= 0.1F;
+                    _leftRight += 0.1F;
                     break;
                 case _MoveMode.RIGHT:
-                    vertical += 0.1F;
+                    _leftRight -= 0.1F;
                     break;
                 case _MoveMode.BACKWARD:
-                    horizontal -= 0.01F;
+                    _forwardBackward -= 0.1F;
                     break;
                 case _MoveMode.FORWARD:
-                    horizontal += 0.01F;
+                    _forwardBackward += 0.1F;
                     break;
             }
+        }
+
+        private void RecalculateMatrix() {
+            MatrixState.EsMatrixLoadIdentity(ref _perspective.Value);
+
+            MatrixState.EsPerspective(ref _perspective.Value, 40.0f, _ratio, 1.0f, 200.0f);
+            MatrixState.EsRotate(ref _perspective.Value, -20F, 1, 0, 0);
+
+            MatrixState.EsTranslate(ref _perspective.Value, _leftRight, -10, _forwardBackward);
         }
     }
 

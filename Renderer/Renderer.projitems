@@ -18,15 +18,17 @@
     <Compile Include="$(MSBuildThisFileDirectory)Models\ShaderCreatingException.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Models\ShaderDescriptor.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Models\ShaderUsage.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)RenderableObjects\CubeRenderableObject.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)RenderableObjects\IRenderableObject.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)RenderableObjects\MemoryCubeRenderableObject.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)RenderableObjects\NObjMeshRenderableObject.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)RenderableObjects\MeshRenderableObject.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Renderer.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Services\IShaderService.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Services\ShaderService.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)MeshLoaders\ObjMeshLoader.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)MeshLoaders\IMeshLoader.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Models\Mesh\Face.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Services\MeshLoading\IMeshLoadingService.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Services\MeshLoading\ObjMeshLoadingService.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="$(MSBuildThisFileDirectory)Services\MeshLoading\" />
   </ItemGroup>
 </Project>

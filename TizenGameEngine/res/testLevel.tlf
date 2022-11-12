@@ -8,7 +8,7 @@
             "position": {
                 "x": -2,
                 "y": 0,
-                "z": -15
+                "z": 0
             },
             "rotation": {
                 "x": 0,
@@ -32,7 +32,7 @@
             "position": {
                 "x": 2,
                 "y": 0,
-                "z": -15
+                "z": 0
             },
             "rotation": {
                 "x": 0,
@@ -55,8 +55,8 @@
             "name": "monkey",
             "position": {
                 "x": 2,
-                "y": -3,
-                "z": -15
+                "y": -2,
+                "z": 0
             },
             "rotation": {
                 "x": 0,
@@ -78,9 +78,9 @@
             "type": "obj_mesh",
             "name": "monkey",
             "position": {
-                "x": -2,
-                "y": 2,
-                "z": -15
+                "x": 0,
+                "y": 0,
+                "z": 0
             },
             "rotation": {
                 "x": 0,
@@ -92,7 +92,7 @@
                 "y": 0,
                 "z": 0
             },
-            "geometryPath": "road.obj",
+            "geometryPath": "sphere.obj",
             "textures": [
                 "road.bmp"
             ],

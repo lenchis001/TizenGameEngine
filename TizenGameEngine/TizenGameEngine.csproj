@@ -17,10 +17,13 @@
     <Compile Remove="lib\**" />
     <EmbeddedResource Remove="lib\**" />
     <None Remove="lib\**" />
+    <None Remove="System.Reactive" />
+    <None Remove="Services\" />
   </ItemGroup>
 
   <ItemGroup>
     <Folder Include="res\" />
+    <Folder Include="Services\" />
   </ItemGroup>
 
   <ItemGroup>
@@ -28,6 +31,7 @@
     <PackageReference Include="Tizen.NET" Version="6.0.0.14995">
       <ExcludeAssets>Runtime</ExcludeAssets>
     </PackageReference>
+    <PackageReference Include="System.Reactive" Version="5.0.0" />
   </ItemGroup>
 
   <ItemGroup>

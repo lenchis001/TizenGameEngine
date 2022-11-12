@@ -19,11 +19,14 @@ using OpenTK.Graphics.ES30;
 using OpenTK.Input;
 using OpenTK.Platform.Tizen;
 using System;
+using System.Reactive.Linq;
+using System.Reactive.Subjects;
 using System.Threading.Tasks;
 using TizenGameEngine.LevelLoader.Models;
 using TizenGameEngine.Logger;
 using TizenGameEngine.Renderer;
 using TizenGameEngine.Renderer.Services;
+using TizenGameEngine.Services;
 
 namespace CubeTexture
 {
@@ -31,10 +34,12 @@ namespace CubeTexture
     {
         private ContentRenderer _renderer;
         private readonly IShaderService _shaderService;
+        private readonly IKeyEventHandlingService _keyEventHandlingService;
 
         public TizenGameEngineApplication()
         {
             _shaderService = new ShaderService();
+            _keyEventHandlingService = new KeyEventHandlingService(TimeSpan.FromMilliseconds(400), (e) => _renderer.OnKeyUp(null, e));
         }
 
         protected override void OnCreate()
@@ -55,7 +60,7 @@ namespace CubeTexture
 
         private void _OnKeyUp(object sender, KeyboardKeyEventArgs e)
         {
-            _renderer.OnKeyUp(sender, e);
+            _keyEventHandlingService.OnEventOccured(e);
         }
 
         private void _OnKeyDown(object sender, KeyboardKeyEventArgs e)
@@ -65,6 +70,8 @@ namespace CubeTexture
 
         private void _OnRenderFrame(object sender, FrameEventArgs e)
         {
+            _keyEventHandlingService.OnTick(e.Time);
+
             _renderer.RenderFrame();
 
             Window.SwapBuffers();
